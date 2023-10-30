@@ -2,13 +2,14 @@ import pandas as pd
 from torch.utils.data import Dataset
 
 class VaeDataset(Dataset):
-    def __init__(self, csv):
+    def __init__(self, data_path):
         # Read in the data
-        self.df = pd.read_csv(path, sep="\t")
+        self.df = pd.read_csv(data_path, sep="\t")
         # Extract the sample names
         self.sampleid = self.df["sample_id"].values
         # Extrac the values
         self.data = self.df.iloc[:,1:].values
+    
     def __getitem__(self, idx):
         output = {}
         # Get the correct indices of data
