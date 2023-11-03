@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "/zhome/99/d/155947/DeeplearningProject/deepIsoforTraceback (most recent call last):
+  File "/zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/./small_VAE_test.py", line 77, in <module>
+    # training..
+  File "/zhome/99/d/155947/miniconda3/envs/VAE-env2/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 628, in __next__
+    data = self._next_data()
+  File "/zhome/99/d/155947/miniconda3/envs/VAE-env2/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 671, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/zhome/99/d/155947/miniconda3/envs/VAE-env2/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 58, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/zhome/99/d/155947/miniconda3/envs/VAE-env2/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 58, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/../scripts/chunky_loader.py", line 72, in __getitem__
+    self.df = pd.read_csv(StringIO(chunk), sep='\t', header=None)
+  File "/zhome/99/d/155947/miniconda3/envs/VAE-env2/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 948, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "/zhome/99/d/155947/miniconda3/envs/VAE-env2/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 617, in _read
+    return parser.read(nrows)
+  File "/zhome/99/d/155947/miniconda3/envs/VAE-env2/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 1748, in read
+    ) = self._engine.read(  # type: ignore[attr-defined]
+  File "/zhome/99/d/155947/miniconda3/envs/VAE-env2/lib/python3.10/site-packages/pandas/io/parsers/c_parser_wrapper.py", line 234, in read
+    chunks = self._reader.read_low_memory(nrows)
+KeyboardInterrupt

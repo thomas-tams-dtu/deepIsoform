@@ -16,18 +16,6 @@ from torchvision.transforms import ToTensor
 from functools import reduce
 
 
-LATENT_FEATURES = 100
-BATCH_SIZE = 10
-CHUNK_SIZE = 100
-
-
-print('Latent_features', LATENT_FEATURES)
-print('Batch size', BATCH_SIZE)
-print('Chunk size', CHUNK_SIZE)
-
-
-h_x_all = []
-
 class ReparameterizedDiagonalGaussian(Distribution):
     """
     A distribution `N(y | mu, sigma I)` compatible with the reparameterization trick given `epsilon ~ N(0, 1)`.
@@ -55,7 +43,6 @@ class ReparameterizedDiagonalGaussian(Distribution):
         return torch.distributions.normal.Normal(self.mu, self.sigma).log_prob(z) # <- your code
 
 
-
 class VariationalAutoencoder(nn.Module):
     """A Variational Autoencoder with
     * a Bernoulli observation model `p_\theta(x | z) = B(x | g_\theta(z))`
@@ -75,23 +62,23 @@ class VariationalAutoencoder(nn.Module):
         # Encode the observation `x` into the parameters of the posterior distribution
         # `q_\phi(z|x) = N(z | \mu(x), \sigma(x)), \mu(x),\log\sigma(x) = h_\phi(x)`
         self.encoder = nn.Sequential(
-            nn.Linear(in_features=self.observation_features, out_features=3600).double(),
+            nn.Linear(in_features=self.observation_features, out_features=2000).double(),
             nn.ReLU(),
-            nn.Linear(in_features=3600, out_features=1200).double(),
+            nn.Linear(in_features=2000, out_features=1000).double(),
             nn.ReLU(),
             # A Gaussian is fully characterised by its mean \mu and variance \sigma**2
-            nn.Linear(in_features=1200, out_features=2*latent_features).double() # <- note the 2*latent_features
+            nn.Linear(in_features=1000, out_features=2*latent_features).double() # <- note the 2*latent_features
         )
 
         # Generative Model
         # Decode the latent sample `z` into the parameters of the observation model
         # `p_\theta(x | z) = \prod_i B(x_i | g_\theta(x))`
         self.decoder = nn.Sequential(
-            nn.Linear(in_features=latent_features, out_features=1200).double(),
+            nn.Linear(in_features=latent_features, out_features=1000).double(),
             nn.ReLU(),
-            nn.Linear(in_features=1200, out_features=3600).double(),
+            nn.Linear(in_features=1000, out_features=2000).double(),
             nn.ReLU(),
-            nn.Linear(in_features=3600, out_features=self.observation_features).double()
+            nn.Linear(in_features=2000, out_features=self.observation_features).double()
         )
 
         # define the parameters of the prior, chosen as p(z) = N(0, I)
@@ -102,10 +89,8 @@ class VariationalAutoencoder(nn.Module):
         """return the distribution `q(z|x) = N(z | \mu(x), \sigma(x))`"""
 
         # compute the parameters of the posterior
-        print('minimum x', torch.min(x))
         h_x = self.encoder(x)
-        print('minimum h_x', torch.min(h_x).item())
-        h_x_all.append(torch.min(h_x).item())
+        #print('minimum h_x', torch.min(h_x).item())
         mu, log_sigma =  h_x.chunk(2, dim=-1)
 
         # return a distribution `q(x|x) = N(z | \mu(x), \sigma(x))`
@@ -162,7 +147,6 @@ class VariationalAutoencoder(nn.Module):
         return {'px': px, 'pz': pz, 'z': z}
 
 
-
 def reduce(x:Tensor) -> Tensor:
     """for each datapoint: sum over all dimensions"""
     return x.view(x.size(0), -1).sum(dim=1)
@@ -200,94 +184,3 @@ class VariationalInference(nn.Module):
             diagnostics = {'elbo': elbo, 'log_px':log_px, 'kl': kl, 'log_qz': log_qz, 'log_pz' : log_pz, 'beta_elbo': beta_elbo}
 
         return loss, diagnostics, outputs
-    
-
-from allDataLoaderVAE import get_loaders
-
-# choose and load tsv datafile
-loader_train, loader_test = get_loaders(batch_size=BATCH_SIZE)
-data_train, labels = next(iter(loader_train))
-
-
-from collections import defaultdict
-# define the models, evaluator and optimizer
-
-# VAE
-latent_features = LATENT_FEATURES
-vae = VariationalAutoencoder(data_train[0].size(), latent_features)
-
-# Evaluator: Variational Inference
-beta = 1
-vi = VariationalInference(beta=beta)
-
-# The Adam optimizer works really well with VAEs.
-optimizer = torch.optim.Adam(vae.parameters(), lr=1e-4)
-
-# define dictionary to store the training curves
-training_data = defaultdict(list)
-validation_data = defaultdict(list)
-
-
-print(vae)
-
-
-
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-print(f">> Using device: {device}")
-
-num_epochs = 100
-epoch = 0
-
-# move the model to the device
-vae = vae.to(device)
-
-
-all_loss = list()
-# training..
-while epoch < num_epochs:
-    epoch+= 1
-    training_epoch_data = defaultdict(list)
-    vae.train()
-
-    # Go through each batch in the training dataset using the loader
-    # Note that y is not necessarily known as it is here
-    for x, y in loader_train:
-        x = x.to(device)
-
-        # perform a forward pass through the model and compute the ELBO
-        loss, diagnostics, outputs = vi(vae, x)
-
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-
-        # gather data for the current bach
-        for k, v in diagnostics.items():
-            training_epoch_data[k] += [v.mean().item()]
-
-
-    # gather data for the full epoch
-    for k, v in training_epoch_data.items():
-        training_data[k] += [np.mean(training_epoch_data[k])]
-
-    # Evaluate on a single batch, do not propagate gradients
-    with torch.no_grad():
-        vae.eval()
-
-        # Just load a single batch from the test loader
-        x, y = next(iter(loader_test))
-        x = x.to(device)
-
-        # perform a forward pass through the model and compute the ELBO
-        loss, diagnostics, outputs = vi(vae, x)
-
-        # gather data for the validation step
-        for k, v in diagnostics.items():
-            validation_data[k] += [v.mean().item()]
-
-    all_loss.append(loss)
-    
-    print(epoch, 'done')
-    print('loss' , loss)
-
-print(all_loss)

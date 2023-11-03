@@ -13,7 +13,7 @@
 ### -- specify that we want the job to get killed if it exceeds 100 GB per core/slot -- 
 #BSUB -M 100GB
 ### -- set walltime limit: hh:mm -- 
-#BSUB -W 2:00 
+#BSUB -W 3:00 
 ### -- set the email address -- 
 # please uncomment the following line and put in your e-mail address,
 # if you want to receive e-mail notifications on a non-default address
@@ -30,4 +30,4 @@
 # here follow the commands you want to execute with input.in as the input file
 module load cuda/11.6
 source activate VAE-env2
-smallVAErun.py > VAE_loss.out
+{ time small_VAE_test.py ; } 2> time_2000_1000_50_10000dp.txt
