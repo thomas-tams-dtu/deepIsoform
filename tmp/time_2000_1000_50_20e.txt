@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/small_VAE_test.py", line 54, in <module>
+    for layer in vae:
+TypeError: 'VariationalAutoencoder' object is not iterable
+
+real	5m45.555s
+user	1m21.039s
+sys	0m3.628s
