@@ -28,3 +28,4 @@ for loss in train_loss:
     print(loss)
 
 print(val_loss)
+

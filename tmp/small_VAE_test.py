@@ -20,6 +20,7 @@ LATENT_FEATURES =       50
 LEARNING_RATE =         1e-5
 NUM_EPOCHS =            20
 
+
 print('NROWS_DATASET      ',          NROWS_DATASET)
 print('NROWS_DATASET_TRAIN',    NROWS_DATASET_TRAIN)
 print('NROWS_DATASET_TEST ',     NROWS_DATASET_TEST)
@@ -28,6 +29,7 @@ print('BATCH_SIZE         ',             BATCH_SIZE)
 print('LATENT_FEATURES    ',        LATENT_FEATURES)
 print('LEARNING_RATE      ',          LEARNING_RATE)
 print('NUM_EPOCHS         ',             NUM_EPOCHS)
+
 
 init_values = [NROWS_DATASET,
                NROWS_DATASET_TRAIN,
@@ -49,7 +51,9 @@ data_train, _ = next(iter(loader_train))
 
 # Define the models, evaluator and optimizer
 # VAE
+
 vae = VariationalAutoencoder(data_train[0].size(), LATENT_FEATURES)
+
 
 # Evaluator: Variational Inference
 beta = 1
@@ -71,9 +75,12 @@ print(f">> Using device: {device}")
 # move the model to the device
 vae = vae.to(device)
 
+num_epochs = 1
+
 epoch = 0
 val_loss = list()
 train_loss = list()
+
 # training..
 while epoch < NUM_EPOCHS:
     epoch+= 1
