@@ -11,16 +11,18 @@ from chunky_loader import ChunkyDataset
 from small_VAE_code import VariationalAutoencoder, VariationalInference
 from collections import defaultdict
 
-NROWS_DATASET =         167885    # 167885
-NROWS_DATASET_TEST =    20000
+
+NROWS_DATASET =         1000    # 167885
+NROWS_DATASET_TEST =    100          # 20000
 NROWS_DATASET_TRAIN =   NROWS_DATASET - NROWS_DATASET_TEST
-CHUNK_SIZE =            1000
-BATCH_SIZE =            1000
+CHUNK_SIZE =            100
+BATCH_SIZE =            50
 LATENT_FEATURES =       50
 LEARNING_RATE =         1e-5
-NUM_EPOCHS =            20
+NUM_EPOCHS =            50
+MODEL_NAME =            f'e_{NUM_EPOCHS}_d{NROWS_DATASET_TRAIN}_{NROWS_DATASET_TEST}_l2000_1000_{LATENT_FEATURES}'
 
-
+print('MODEL_NAME         ',             MODEL_NAME)
 print('NROWS_DATASET      ',          NROWS_DATASET)
 print('NROWS_DATASET_TRAIN',    NROWS_DATASET_TRAIN)
 print('NROWS_DATASET_TEST ',     NROWS_DATASET_TEST)
@@ -78,8 +80,6 @@ vae = vae.to(device)
 num_epochs = 1
 
 epoch = 0
-val_loss = list()
-train_loss = list()
 
 # training..
 while epoch < NUM_EPOCHS:
@@ -94,8 +94,6 @@ while epoch < NUM_EPOCHS:
 
         # perform a forward pass through the model and compute the ELBO
         loss, diagnostics, outputs = vi(vae, x)
-
-        train_loss.append(loss)
 
         optimizer.zero_grad()
         loss.backward()
@@ -120,29 +118,30 @@ while epoch < NUM_EPOCHS:
 
         # perform a forward pass through the model and compute the ELBO
         loss, diagnostics, outputs = vi(vae, x)
-        val_loss.append(loss)
 
         # gather data for the validation step
         for k, v in diagnostics.items():
             validation_data[k] += [v.mean().item()]
+
+    print(epoch, 'done')
     
 
 
 
 # Assuming 'model' is your PyTorch model
-model_path = '/zhome/99/d/155947/DeeplearningProject/deepIsoform/models/first_test_2000_1000_50'  # The file path to save the model
+model_path = f'/zhome/99/d/155947/DeeplearningProject/deepIsoform/models/{MODEL_NAME}'  # The file path to save the model
 
 # Create a dictionary to save additional information (optional)
 info = {
-    'architecture': 'First VAE' ,
+    'architecture': MODEL_NAME ,
     'init_values': init_values,
     'hyperparameters': {
         'learning_rate': LEARNING_RATE,
         'batch_size': BATCH_SIZE,
         'layer_size': [2000, 1000, LATENT_FEATURES]
     },
-    'train_loss': train_loss,
-    'val_loss': val_loss
+    'train_data': training_data,
+    'validation_data': validation_data
 }
 
 # Save the model and additional information

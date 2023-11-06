@@ -11,7 +11,7 @@
 ### -- set walltime limit: hh:mm --  maximum 24 hours for GPU-queues right now
 #BSUB -W 23:00
 # request 5GB of system-memory
-#BSUB -R "rusage[mem=100GB]"
+#BSUB -R "rusage[mem=25GB]"
 #BSUB -R "select[gpu32gb]"
 #BSUB -R "span[hosts=1]"
 ### -- set the email address --
@@ -38,4 +38,4 @@ module load cuda/11.6
 source activate VAE-env2
 
 # Run command
-{ time /zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/small_VAE_test.py ; } 2> time_2000_1000_50_20e.txt
+{ time /zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/small_VAE_test.py ; } 2> time_e50_d1000_100_l2000_1000_50.txt

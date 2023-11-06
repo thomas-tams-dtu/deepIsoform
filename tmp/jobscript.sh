@@ -29,5 +29,5 @@
 
 # here follow the commands you want to execute with input.in as the input file
 source activate VAE-env2
-{ time /zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/small_VAE_test.py ; } 2> time_2000_1000_50_20e.txt
+{ time /zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/small_VAE_test.py ; } 2> time_2000_1000_50_50e.txt
 
