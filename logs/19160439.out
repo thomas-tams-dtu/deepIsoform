@@ -1,0 +1,143 @@
+Mon Nov  6 14:03:43 2023       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 535.104.12             Driver Version: 535.104.12   CUDA Version: 12.2     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  Tesla V100-PCIE-32GB           On  | 00000000:58:00.0 Off |                    0 |
+| N/A   30C    P0              25W / 250W |      0MiB / 32768MiB |      0%   E. Process |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|  No running processes found                                                           |
++---------------------------------------------------------------------------------------+
+Loaded module: cuda/11.6
+/appl/cuda/11.6.0/samples/bin/x86_64/linux/release/deviceQuery Starting...
+
+ CUDA Device Query (Runtime API) version (CUDART static linking)
+
+Detected 1 CUDA Capable device(s)
+
+Device 0: "Tesla V100-PCIE-32GB"
+  CUDA Driver Version / Runtime Version          12.2 / 11.6
+  CUDA Capability Major/Minor version number:    7.0
+  Total amount of global memory:                 32501 MBytes (34079899648 bytes)
+  (080) Multiprocessors, (064) CUDA Cores/MP:    5120 CUDA Cores
+  GPU Max Clock rate:                            1380 MHz (1.38 GHz)
+  Memory Clock rate:                             877 Mhz
+  Memory Bus Width:                              4096-bit
+  L2 Cache Size:                                 6291456 bytes
+  Maximum Texture Dimension Size (x,y,z)         1D=(131072), 2D=(131072, 65536), 3D=(16384, 16384, 16384)
+  Maximum Layered 1D Texture Size, (num) layers  1D=(32768), 2048 layers
+  Maximum Layered 2D Texture Size, (num) layers  2D=(32768, 32768), 2048 layers
+  Total amount of constant memory:               65536 bytes
+  Total amount of shared memory per block:       49152 bytes
+  Total shared memory per multiprocessor:        98304 bytes
+  Total number of registers available per block: 65536
+  Warp size:                                     32
+  Maximum number of threads per multiprocessor:  2048
+  Maximum number of threads per block:           1024
+  Max dimension size of a thread block (x,y,z): (1024, 1024, 64)
+  Max dimension size of a grid size    (x,y,z): (2147483647, 65535, 65535)
+  Maximum memory pitch:                          2147483647 bytes
+  Texture alignment:                             512 bytes
+  Concurrent copy and kernel execution:          Yes with 7 copy engine(s)
+  Run time limit on kernels:                     No
+  Integrated GPU sharing Host Memory:            No
+  Support host page-locked memory mapping:       Yes
+  Alignment requirement for Surfaces:            Yes
+  Device has ECC support:                        Enabled
+  Device supports Unified Addressing (UVA):      Yes
+  Device supports Managed Memory:                Yes
+  Device supports Compute Preemption:            Yes
+  Supports Cooperative Kernel Launch:            Yes
+  Supports MultiDevice Co-op Kernel Launch:      Yes
+  Device PCI Domain ID / Bus ID / location ID:   0 / 88 / 0
+  Compute Mode:
+     < Exclusive Process (many threads in one process is able to use ::cudaSetDevice() with this device) >
+
+deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = 12.2, CUDA Runtime Version = 11.6, NumDevs = 1
+Result = PASS
+MODEL_NAME          e_50_d900_100_l2000_1000_50
+NROWS_DATASET       1000
+NROWS_DATASET_TRAIN 900
+NROWS_DATASET_TEST  100
+CHUNK_SIZE          100
+BATCH_SIZE          50
+LATENT_FEATURES     50
+LEARNING_RATE       1e-05
+NUM_EPOCHS          50
+VariationalAutoencoder(
+  (encoder): Sequential(
+    (0): Linear(in_features=18965, out_features=2000, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=2000, out_features=1000, bias=True)
+    (3): ReLU()
+    (4): Linear(in_features=1000, out_features=100, bias=True)
+  )
+  (decoder): Sequential(
+    (0): Linear(in_features=50, out_features=1000, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=1000, out_features=2000, bias=True)
+    (3): ReLU()
+    (4): Linear(in_features=2000, out_features=18965, bias=True)
+  )
+)
+>> Using device: cuda:0
+1 done
+2 done
+3 done
+4 done
+5 done
+6 done
+7 done
+8 done
+9 done
+10 done
+11 done
+12 done
+13 done
+14 done
+15 done
+16 done
+17 done
+18 done
+19 done
+20 done
+21 done
+22 done
+23 done
+24 done
+25 done
+26 done
+27 done
+28 done
+29 done
+30 done
+31 done
+32 done
+33 done
+34 done
+35 done
+36 done
+37 done
+38 done
+39 done
+40 done
+41 done
+42 done
+43 done
+44 done
+45 done
+46 done
+47 done
+48 done
+49 done
+50 done
