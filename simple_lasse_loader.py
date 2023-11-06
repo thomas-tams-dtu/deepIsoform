@@ -1,8 +1,8 @@
-path = '/dtu-compute/datasets/iso_02456/archs4_gene_expression_norm_transposed.tsv.gz'
+path = '/dtu-compute/datasets/iso_02456/archs4_gene_expression_$
 import pandas as pd
 import torch
-def read_chunks(path, prints=False)
-  allbatches = pd.read_csv(path, engine='c',sep='\t', chunksize=500)
+def read_chunks(path, prints=False):
+  allbatches = pd.read_csv(path, engine='c',sep='\t', chunksize$
   i = 0
   for batch in allbatches:
       batch=batch.iloc[:,1:]
@@ -10,9 +10,11 @@ def read_chunks(path, prints=False)
 
       if prints:
         i += 500
-        print('at line:',i)
+        print('at line:', i)
       yield batch
-    for chunk in read_chunks(path, prints=True):
+for chunk in read_chunks(path, prints=True):
         pass
+
+
 
 
