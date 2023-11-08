@@ -1,4 +1,4 @@
-name: VAE-env2
+zname: VAE-env2
 channels:
   - pytorch
   - nvidia
