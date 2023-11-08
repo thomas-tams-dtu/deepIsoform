@@ -14,10 +14,10 @@ from collections import defaultdict
 NROWS_DATASET =         167885    # 167885
 NROWS_DATASET_TEST =    20000
 NROWS_DATASET_TRAIN =   NROWS_DATASET - NROWS_DATASET_TEST
-CHUNK_SIZE =            1000
-BATCH_SIZE =            1000
-LATENT_FEATURES =       50
-LEARNING_RATE =         1e-5
+CHUNK_SIZE =            5000
+BATCH_SIZE =            512
+LATENT_FEATURES =       16
+LEARNING_RATE =         1e-7
 NUM_EPOCHS =            20
 
 
@@ -39,7 +39,7 @@ init_values = [NROWS_DATASET,
                LATENT_FEATURES]
 
 # Construct data sets and data loaders
-gz_path ="/zhome/99/d/155947/DeeplearningProject/deepIsoform/data/raw_data/archs4_gene_expression_norm_transposed.tsv.gz"
+gz_path ="/zhome/b6/d/154958/deepIsoform/data/raw_data/archs4_gene_expression_norm_transposed.tsv.gz"
 #gz_path = "/zhome/99/d/155947/DeeplearningProject/deepIsoform/data/head500_archs4_gene_expression_norm_transposed.tsv.gz"
 GzChunks_train = ChunkyDataset(file_path=gz_path, nrows=NROWS_DATASET_TRAIN, lines_per_chunk=CHUNK_SIZE, skip_lines=NROWS_DATASET_TEST, got_header=True)
 GzChunks_test = ChunkyDataset(file_path=gz_path, nrows=NROWS_DATASET_TEST, lines_per_chunk=CHUNK_SIZE, skip_lines=0, got_header=True)
@@ -80,6 +80,7 @@ num_epochs = 1
 epoch = 0
 val_loss = list()
 train_loss = list()
+from tqdm import tqdm
 
 # training..
 while epoch < NUM_EPOCHS:
@@ -89,7 +90,7 @@ while epoch < NUM_EPOCHS:
 
     # Go through each batch in the training dataset using the loader
     # Note that y is not necessarily known as it is here
-    for x, y in loader_train:
+    for x, y in tqdm(loader_train):
         x = x.to(device)
 
         # perform a forward pass through the model and compute the ELBO
@@ -100,11 +101,10 @@ while epoch < NUM_EPOCHS:
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-
+        
         # gather data for the current bach
         for k, v in diagnostics.items():
             training_epoch_data[k] += [v.mean().item()]
-
 
     # gather data for the full epoch
     for k, v in training_epoch_data.items():
@@ -125,12 +125,14 @@ while epoch < NUM_EPOCHS:
         # gather data for the validation step
         for k, v in diagnostics.items():
             validation_data[k] += [v.mean().item()]
+        print("Diagnostics", diagnostics)
+        print("Validation Loss:", loss)
     
 
 
 
 # Assuming 'model' is your PyTorch model
-model_path = '/zhome/99/d/155947/DeeplearningProject/deepIsoform/models/first_test_2000_1000_50'  # The file path to save the model
+model_path = '/zhome/b6/d/154958/deepIsoform/models/first_test_2000_1000_50'  # The file path to save the model
 
 # Create a dictionary to save additional information (optional)
 info = {

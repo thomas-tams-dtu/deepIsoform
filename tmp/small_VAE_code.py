@@ -54,7 +54,7 @@ class VariationalAutoencoder(nn.Module):
         super(VariationalAutoencoder, self).__init__()
 
         self.input_shape = input_shape
-        self.latent_features = latent_features
+        self.latent_features = 16
         self.observation_features = np.prod(input_shape)
 
 
@@ -62,23 +62,26 @@ class VariationalAutoencoder(nn.Module):
         # Encode the observation `x` into the parameters of the posterior distribution
         # `q_\phi(z|x) = N(z | \mu(x), \sigma(x)), \mu(x),\log\sigma(x) = h_\phi(x)`
         self.encoder = nn.Sequential(
-            nn.Linear(in_features=self.observation_features, out_features=2000).double(),
+            nn.Dropout(0.5),
+            nn.Linear(in_features=self.observation_features, out_features=512).double(),
             nn.ReLU(),
-            nn.Linear(in_features=2000, out_features=1000).double(),
+            nn.Linear(in_features=512, out_features=128).double(),
             nn.ReLU(),
             # A Gaussian is fully characterised by its mean \mu and variance \sigma**2
-            nn.Linear(in_features=1000, out_features=2*latent_features).double() # <- note the 2*latent_features
+            nn.Linear(in_features=128, out_features=2*latent_features).double() # <- note the 2*latent_features
         )
 
         # Generative Model
         # Decode the latent sample `z` into the parameters of the observation model
         # `p_\theta(x | z) = \prod_i B(x_i | g_\theta(x))`
         self.decoder = nn.Sequential(
-            nn.Linear(in_features=latent_features, out_features=1000).double(),
+            nn.Linear(in_features=latent_features, out_features=32).double(),
             nn.ReLU(),
-            nn.Linear(in_features=1000, out_features=2000).double(),
+            nn.Linear(in_features=32, out_features=128).double(),
             nn.ReLU(),
-            nn.Linear(in_features=2000, out_features=self.observation_features).double()
+            nn.Linear(in_features=128, out_features=512).double(),
+            nn.ReLU(),
+            nn.Linear(in_features=512, out_features=self.observation_features).double()
         )
 
         for layer in self.encoder:
@@ -102,7 +105,7 @@ class VariationalAutoencoder(nn.Module):
         mu, log_sigma =  h_x.chunk(2, dim=-1)
 
         # return a distribution `q(x|x) = N(z | \mu(x), \sigma(x))`
-        return ReparameterizedDiagonalGaussian(mu, log_sigma)
+        return ReparameterizedDiagonalGaussian(mu, log_sigma), log_sigma, mu
 
     def prior(self, batch_size:int=1)-> Distribution:
         """return the distribution `p(z)`"""
@@ -126,7 +129,7 @@ class VariationalAutoencoder(nn.Module):
         x = x.view(x.size(0), -1)
 
         # define the posterior q(z|x) / encode x into q(z|x)
-        qz = self.posterior(x)
+        qz, log_sigma,mu = self.posterior(x)
 
         # define the prior p(z)
         pz = self.prior(batch_size=x.size(0))
@@ -137,7 +140,7 @@ class VariationalAutoencoder(nn.Module):
         # define the observation model p(x|z) = B(x | g(z))
         px = self.observation_model(z)
 
-        return {'px': px, 'pz': pz, 'qz': qz, 'z': z}
+        return {'px': px, 'pz': pz, 'qz': qz, 'z': z}, log_sigma, mu
 
 
     def sample_from_prior(self, batch_size:int=100):
@@ -167,8 +170,8 @@ class VariationalInference(nn.Module):
     def forward(self, model:nn.Module, x:Tensor) -> Tuple[Tensor, Dict]:
 
         # forward pass through the model
-        outputs = model(x)
-
+        outputs, log_sigma, mu = model(x)
+        
         # unpack outputs
         px, pz, qz, z = [outputs[k] for k in ["px", "pz", "qz", "z"]]
 
@@ -177,18 +180,26 @@ class VariationalInference(nn.Module):
         log_pz = reduce(pz.log_prob(z))
         log_qz = reduce(qz.log_prob(z))
 
+    
+
         # compute the ELBO with and without the beta parameter:
         # `L^\beta = E_q [ log p(x|z) ] - \beta * D_KL(q(z|x) | p(z))`
         # where `D_KL(q(z|x) | p(z)) = log q(z|x) - log p(z)
+
+        #Man kan adde en vægt til denne her 
+        lossfunc = nn.BCEWithLogitsLoss()
+        xent_loss = lossfunc(log_pz, log_px)
+        
+        kl_loss = -0.5 * (1 + log_sigma - mu.square()- log_sigma.exp()).sum()
+
         kl = log_qz - log_pz
         elbo = log_px - kl # <- your code here
         beta_elbo = log_px - self.beta*kl # <- your code here
 
         # loss # minus is there because we want to maximize and not minimize?
-        loss = -beta_elbo.mean()
+        loss = (xent_loss+kl_loss).mean()
 
         # prepare the output
         with torch.no_grad():
-            diagnostics = {'elbo': elbo, 'log_px':log_px, 'kl': kl, 'log_qz': log_qz, 'log_pz' : log_pz, 'beta_elbo': beta_elbo}
-
+            diagnostics = {'xentLoss': xent_loss, 'log_px':log_px, 'kl': kl, 'log_qz': log_qz, 'log_pz' : log_pz, 'kl_loss': kl_loss}
         return loss, diagnostics, outputs
