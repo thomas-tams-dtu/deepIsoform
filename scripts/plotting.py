@@ -32,5 +32,4 @@ def make_vae_plots(vae, x, y, outputs, training_data, validation_data, tmp_img="
     plt.tight_layout()
     plt.savefig(tmp_img)
     plt.close(fig)
-    display(Image(filename=tmp_img))
     clear_output(wait=True)
