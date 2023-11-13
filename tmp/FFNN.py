@@ -19,11 +19,11 @@ class FeedForwardIsoform(nn.Module):
         self.output_features = np.prod(output_shape)
 
         self.FNN = nn.Sequential(
-            nn.Linear(in_features=self.input_features, out_features=512),
+            nn.Linear(in_features=self.input_features, out_features=512).double(),
             nn.ReLU(),
-            nn.Linear(in_features=512, out_features=512),
+            nn.Linear(in_features=512, out_features=512).double(),
             nn.ReLU(),
-            nn.Linear(in_features=512, out_features=self.output_features)
+            nn.Linear(in_features=512, out_features=self.output_features).double()
         )
 
         for layer in self.FNN:
@@ -31,8 +31,6 @@ class FeedForwardIsoform(nn.Module):
                 torch.nn.init.xavier_uniform_(layer.weight)
 
     def forward(self, x) -> Dict[str, Any]:
-        """compute the posterior q(z|x) (encoder), sample z~q(z|x) and return the distribution p(x|z) (decoder)"""
-
         # flatten the input
         x = x.view(x.size(0), -1)
         x = self.FNN(x)

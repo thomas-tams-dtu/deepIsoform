@@ -4,7 +4,6 @@ import torch
 import IsoDatasets as IsoDatasets
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-import pandas as pd
 import numpy as np
 from typing import *
 from FFNN import FeedForwardIsoform
@@ -12,7 +11,6 @@ from collections import defaultdict
 import pickle
 import sys
 sys.path.insert(1, '/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts')
-from hdf5_load import DatasetHDF5_gtex
 from plotting import make_vae_plots
 
 
@@ -29,12 +27,12 @@ def accuracy(ys, ts):
     return torch.mean(correct_prediction.float())
 
 
-BATCH_SIZE = 200
+BATCH_SIZE = 50
 LATENT_FEATURES = 32
 LEARNING_RATE = 1e-5
 NUM_EPOCHS = 100
 MODEL_NAME = f'PCA_l{LATENT_FEATURES}_lr{LEARNING_RATE}_e{NUM_EPOCHS}'
-IPCA = f'/zhome/99/d/155947/DeeplearningProject/deepIsoform/models/ipca_model_n{LATENT_FEATURES}_small.pkl'
+IPCA = f'/zhome/99/d/155947/DeeplearningProject/deepIsoform/models/ipca_model_n{LATENT_FEATURES}.pkl'
 
 # Load gtex datasets
 gtex_train = IsoDatasets.GtexDataset("/dtu-compute/datasets/iso_02456/hdf5/", exclude='brain')
@@ -43,8 +41,8 @@ gtex_test = IsoDatasets.GtexDataset("/dtu-compute/datasets/iso_02456/hdf5/", inc
 print("gtex training set size:", len(gtex_train))
 print("gtex test set size:", len(gtex_test))
 
-gtx_train_dataloader = DataLoader(gtex_train, batch_size=64, shuffle=True)
-gtx_test_dataloader = DataLoader(gtex_test, batch_size=64, shuffle=True)
+gtx_train_dataloader = DataLoader(gtex_train, batch_size=BATCH_SIZE, shuffle=True)
+gtx_test_dataloader = DataLoader(gtex_test, batch_size=BATCH_SIZE, shuffle=True)
 
 # Define PCA model
 with open(IPCA, 'rb') as file:
@@ -64,8 +62,8 @@ criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(FNN.parameters(), lr=LEARNING_RATE)
 
 # define dictionary to store the training curves
-training_data = defaultdict(list)
-validation_data = defaultdict(list)
+training_data =   [] #defaultdict(list)
+validation_data = [] #defaultdict(list)
 
 
 # If GPU available send to gpu
@@ -74,23 +72,29 @@ print(f">> Using device: {device}")
 
 # move the model to the device
 FNN = FNN.to(device)
+criterion = criterion.to(device)
 
 # training..
 epoch = 0
 while epoch < NUM_EPOCHS:
     epoch+= 1
-    training_epoch_data = defaultdict(list)
+    training_epoch_data = [] #[defaultdict(list)]
     FNN.train()
 
     # Go through each batch in the training dataset using the loader
     # Note that y is not necessarily known as it is here
     for x, y in tqdm(gtx_train_dataloader):
         # Send to device and do PCA
+        x = ipca.transform(x)
+        x = torch.from_numpy(x)
         x = x.to(device)
-        x = ipca.fit_transform(x)
+        y = y.to(device)
+
+        # Run through network
+        x = FNN.forward(x)
 
         # Caculate loss and backprop
-        loss = criterion(x, isoform_expr)
+        loss = criterion(x, y)
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
@@ -98,15 +102,25 @@ while epoch < NUM_EPOCHS:
         training_epoch_data.append(loss.mean().item())
 
     training_data.append(np.mean(training_epoch_data))
+    print(training_data)
 
     # Evaluate on a single batch, do not propagate gradients
     with torch.no_grad():
         FNN.eval()
-        gene_expr, isoform_expr = next(iter(gtx_test_dataloader))
-        
+        # Grab test data
+        x, y = next(iter(gtx_test_dataloader))
+
+        # Run PCA
+        x = ipca.transform(x)
+        x = torch.from_numpy(x)
         x = x.to(device)
-        x = ipca.fit_transform(x)
-        loss = criterion(x, isoform_expr)
+        y = y.to(device)
+
+        # Run through network
+        x = FNN.forward(x)
+
+        # Calculate loss
+        loss = criterion(x, y)
 
         training_epoch_data.append(loss.mean().item())
 
