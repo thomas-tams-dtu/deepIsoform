@@ -1,3 +1,4 @@
 data/
 models/
 
+tmp/DNN_train.py
