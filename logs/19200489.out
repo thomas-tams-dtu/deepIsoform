@@ -1,0 +1,140 @@
+
+
+Thu Nov  9 12:19:09 2023       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 535.104.12             Driver Version: 535.104.12   CUDA Version: 12.2     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  Tesla V100-PCIE-32GB           On  | 00000000:D8:00.0 Off |                    0 |
+| N/A   27C    P0              24W / 250W |      0MiB / 32768MiB |      0%   E. Process |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|  No running processes found                                                           |
++---------------------------------------------------------------------------------------+
+Loaded module: cuda/11.6
+/appl/cuda/11.6.0/samples/bin/x86_64/linux/release/deviceQuery Starting...
+
+ CUDA Device Query (Runtime API) version (CUDART static linking)
+
+Detected 1 CUDA Capable device(s)
+
+Device 0: "Tesla V100-PCIE-32GB"
+  CUDA Driver Version / Runtime Version          12.2 / 11.6
+  CUDA Capability Major/Minor version number:    7.0
+  Total amount of global memory:                 32501 MBytes (34079899648 bytes)
+  (080) Multiprocessors, (064) CUDA Cores/MP:    5120 CUDA Cores
+  GPU Max Clock rate:                            1380 MHz (1.38 GHz)
+  Memory Clock rate:                             877 Mhz
+  Memory Bus Width:                              4096-bit
+  L2 Cache Size:                                 6291456 bytes
+  Maximum Texture Dimension Size (x,y,z)         1D=(131072), 2D=(131072, 65536), 3D=(16384, 16384, 16384)
+  Maximum Layered 1D Texture Size, (num) layers  1D=(32768), 2048 layers
+  Maximum Layered 2D Texture Size, (num) layers  2D=(32768, 32768), 2048 layers
+  Total amount of constant memory:               65536 bytes
+  Total amount of shared memory per block:       49152 bytes
+  Total shared memory per multiprocessor:        98304 bytes
+  Total number of registers available per block: 65536
+  Warp size:                                     32
+  Maximum number of threads per multiprocessor:  2048
+  Maximum number of threads per block:           1024
+  Max dimension size of a thread block (x,y,z): (1024, 1024, 64)
+  Max dimension size of a grid size    (x,y,z): (2147483647, 65535, 65535)
+  Maximum memory pitch:                          2147483647 bytes
+  Texture alignment:                             512 bytes
+  Concurrent copy and kernel execution:          Yes with 7 copy engine(s)
+  Run time limit on kernels:                     No
+  Integrated GPU sharing Host Memory:            No
+  Support host page-locked memory mapping:       Yes
+  Alignment requirement for Surfaces:            Yes
+  Device has ECC support:                        Enabled
+  Device supports Unified Addressing (UVA):      Yes
+  Device supports Managed Memory:                Yes
+  Device supports Compute Preemption:            Yes
+  Supports Cooperative Kernel Launch:            Yes
+  Supports MultiDevice Co-op Kernel Launch:      Yes
+  Device PCI Domain ID / Bus ID / location ID:   0 / 216 / 0
+  Compute Mode:
+     < Exclusive Process (many threads in one process is able to use ::cudaSetDevice() with this device) >
+
+deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = 12.2, CUDA Runtime Version = 11.6, NumDevs = 1
+Result = PASS
+MODEL_NAME          e_100_d147885_20000_l2000_1000_50
+NROWS_DATASET       167885
+NROWS_DATASET_TRAIN 147885
+NROWS_DATASET_TEST  20000
+BATCH_SIZE          5000
+LATENT_FEATURES     50
+LEARNING_RATE       1e-05
+NUM_EPOCHS          100
+VariationalAutoencoder(
+  (encoder): Sequential(
+    (0): Linear(in_features=18965, out_features=2000, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=2000, out_features=1000, bias=True)
+    (3): ReLU()
+    (4): Linear(in_features=1000, out_features=100, bias=True)
+  )
+  (decoder): Sequential(
+    (0): Linear(in_features=50, out_features=1000, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=1000, out_features=2000, bias=True)
+    (3): ReLU()
+    (4): Linear(in_features=2000, out_features=18965, bias=True)
+  )
+)
+>> Using device: cuda:0
+loss:   17677124 elbo:   -1730932 beta_elbo:  -17677124 log_px:      40867 log_qz:         -8 log_pz:   -1771807 kl:    1771799   1
+loss:     393349 elbo:     -31055 beta_elbo:    -393349 log_px:       9200 log_qz:          3 log_pz:     -40252 kl:      40255   2
+loss:      96555 elbo:      -7312 beta_elbo:     -96555 log_px:       2604 log_qz:          7 log_pz:      -9909 kl:       9916   3
+loss:      33291 elbo:      -4277 beta_elbo:     -33291 log_px:      -1053 log_qz:         13 log_pz:      -3211 kl:       3224   4
+loss:      20655 elbo:      -3591 beta_elbo:     -20655 log_px:      -1695 log_qz:         16 log_pz:      -1880 kl:       1896   5
+loss:      15136 elbo:      -1873 beta_elbo:     -15136 log_px:       -399 log_qz:         16 log_pz:      -1458 kl:       1474   6
+loss:       7458 elbo:       2752 beta_elbo:      -7458 log_px:       3886 log_qz:         15 log_pz:      -1119 kl:       1134   7
+loss:      -3716 elbo:      13356 beta_elbo:       3716 log_px:      14427 log_qz:         14 log_pz:      -1057 kl:       1071   8
+loss:     -25763 elbo:      36998 beta_elbo:      25763 log_px:      38247 log_qz:         13 log_pz:      -1235 kl:       1248   9
+loss:     -70266 elbo:      86024 beta_elbo:      70266 log_px:      87775 log_qz:         15 log_pz:      -1736 kl:       1751  10
+loss:    -164512 elbo:     188723 beta_elbo:     164512 log_px:     191413 log_qz:         20 log_pz:      -2670 kl:       2690  11
+loss:    -407876 elbo:     459823 beta_elbo:     407876 log_px:     465594 log_qz:         41 log_pz:      -5731 kl:       5772  12
+loss:   -1159353 elbo:    1291406 beta_elbo:    1159353 log_px:    1306078 log_qz:         95 log_pz:     -14578 kl:      14672  13
+loss:   -3823594 elbo:    4267784 beta_elbo:    3823594 log_px:    4317139 log_qz:        185 log_pz:     -49170 kl:      49354  14
+loss:  -11477139 elbo:   12642089 beta_elbo:   11477139 log_px:   12771528 log_qz:        258 log_pz:    -129181 kl:     129439  15
+loss:  -35935505 elbo:   39303209 beta_elbo:   35935505 log_px:   39677399 log_qz:        318 log_pz:    -373871 kl:     374189  16
+loss: -110937399 elbo:  120614574 beta_elbo:  110937399 log_px:  121689816 log_qz:        430 log_pz:   -1074812 kl:    1075242  17
+loss: -316039702 elbo:  342639108 beta_elbo:  316039702 log_px:  345594598 log_qz:        543 log_pz:   -2954947 kl:    2955490  18
+loss: -822860393 elbo:  892027756 beta_elbo:  822860393 log_px:  899713019 log_qz:        708 log_pz:   -7684554 kl:    7685263  19
+loss: -1738294762 elbo: 1872318917 beta_elbo: 1738294762 log_px: 1887210490 log_qz:        850 log_pz:  -14890723 kl:   14891573  20
+loss: -3125705320 elbo: 3340592719 beta_elbo: 3125705320 log_px: 3364469097 log_qz:        970 log_pz:  -23875407 kl:   23876378  21
+loss: -4924592294 elbo: 5220877965 beta_elbo: 4924592294 log_px: 5253798595 log_qz:       1067 log_pz:  -32919563 kl:   32920630  22
+loss: -7574046668 elbo: 7993775869 beta_elbo: 7574046668 log_px: 8040412446 log_qz:       1089 log_pz:  -46635489 kl:   46636578  23
+loss: -11033358535 elbo: 11596325734 beta_elbo: 11033358535 log_px: 11658877645 log_qz:       1290 log_pz:  -62550621 kl:   62551911  24
+Traceback (most recent call last):
+  File "/zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/VAE_train.py", line 93, in <module>
+    loss, diagnostics, outputs = vi(vae, x)
+  File "/zhome/99/d/155947/miniconda3/envs/VAE-env2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/small_VAE_code.py", line 177, in forward
+    log_pz = reduce(pz.log_prob(z))
+  File "/zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/small_VAE_code.py", line 43, in log_prob
+    return torch.distributions.normal.Normal(self.mu, self.sigma).log_prob(z) # <- your code
+  File "/zhome/99/d/155947/miniconda3/envs/VAE-env2/lib/python3.10/site-packages/torch/distributions/normal.py", line 79, in log_prob
+    self._validate_sample(value)
+  File "/zhome/99/d/155947/miniconda3/envs/VAE-env2/lib/python3.10/site-packages/torch/distributions/distribution.py", line 294, in _validate_sample
+    raise ValueError(
+ValueError: Expected value argument (Tensor of shape (5000, 50)) to be within the support (Real()) of the distribution Normal(loc: torch.Size([5000, 50]), scale: torch.Size([5000, 50])), but found invalid values:
+tensor([[nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        ...,
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan]], device='cuda:0',
+       dtype=torch.float64, grad_fn=<AddBackward0>)

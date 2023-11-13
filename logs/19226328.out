@@ -1,0 +1,125 @@
+Fri Nov 10 23:42:08 2023       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 535.104.12             Driver Version: 535.104.12   CUDA Version: 12.2     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  Tesla V100-SXM2-32GB           On  | 00000000:16:00.0 Off |                    0 |
+| N/A   36C    P0              43W / 300W |      0MiB / 32768MiB |      0%   E. Process |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|  No running processes found                                                           |
++---------------------------------------------------------------------------------------+
+Loaded module: cuda/11.6
+/appl/cuda/11.6.0/samples/bin/x86_64/linux/release/deviceQuery Starting...
+
+ CUDA Device Query (Runtime API) version (CUDART static linking)
+
+Detected 1 CUDA Capable device(s)
+
+Device 0: "Tesla V100-SXM2-32GB"
+  CUDA Driver Version / Runtime Version          12.2 / 11.6
+  CUDA Capability Major/Minor version number:    7.0
+  Total amount of global memory:                 32501 MBytes (34079899648 bytes)
+  (080) Multiprocessors, (064) CUDA Cores/MP:    5120 CUDA Cores
+  GPU Max Clock rate:                            1530 MHz (1.53 GHz)
+  Memory Clock rate:                             877 Mhz
+  Memory Bus Width:                              4096-bit
+  L2 Cache Size:                                 6291456 bytes
+  Maximum Texture Dimension Size (x,y,z)         1D=(131072), 2D=(131072, 65536), 3D=(16384, 16384, 16384)
+  Maximum Layered 1D Texture Size, (num) layers  1D=(32768), 2048 layers
+  Maximum Layered 2D Texture Size, (num) layers  2D=(32768, 32768), 2048 layers
+  Total amount of constant memory:               65536 bytes
+  Total amount of shared memory per block:       49152 bytes
+  Total shared memory per multiprocessor:        98304 bytes
+  Total number of registers available per block: 65536
+  Warp size:                                     32
+  Maximum number of threads per multiprocessor:  2048
+  Maximum number of threads per block:           1024
+  Max dimension size of a thread block (x,y,z): (1024, 1024, 64)
+  Max dimension size of a grid size    (x,y,z): (2147483647, 65535, 65535)
+  Maximum memory pitch:                          2147483647 bytes
+  Texture alignment:                             512 bytes
+  Concurrent copy and kernel execution:          Yes with 5 copy engine(s)
+  Run time limit on kernels:                     No
+  Integrated GPU sharing Host Memory:            No
+  Support host page-locked memory mapping:       Yes
+  Alignment requirement for Surfaces:            Yes
+  Device has ECC support:                        Enabled
+  Device supports Unified Addressing (UVA):      Yes
+  Device supports Managed Memory:                Yes
+  Device supports Compute Preemption:            Yes
+  Supports Cooperative Kernel Launch:            Yes
+  Supports MultiDevice Co-op Kernel Launch:      Yes
+  Device PCI Domain ID / Bus ID / location ID:   0 / 22 / 0
+  Compute Mode:
+     < Exclusive Process (many threads in one process is able to use ::cudaSetDevice() with this device) >
+
+deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = 12.2, CUDA Runtime Version = 11.6, NumDevs = 1
+Result = PASS
+MODEL_NAME          e_100_b5_l1e-05_l512_128_16
+BATCH_SIZE          5000
+LATENT_FEATURES     16
+LEARNING_RATE       1e-05
+BETA                5
+NUM_EPOCHS          100
+MAX_GRAD_NORM       0.5
+VariationalAutoencoder(
+  (encoder): Sequential(
+    (0): Dropout(p=0.5, inplace=False)
+    (1): Linear(in_features=18965, out_features=512, bias=True)
+    (2): ReLU()
+    (3): Linear(in_features=512, out_features=128, bias=True)
+    (4): ReLU()
+    (5): Linear(in_features=128, out_features=32, bias=True)
+  )
+  (decoder): Sequential(
+    (0): Linear(in_features=16, out_features=128, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=128, out_features=512, bias=True)
+    (3): ReLU()
+    (4): Linear(in_features=512, out_features=18965, bias=True)
+  )
+)
+>> Using device: cuda:0
+[2K[2Kloss:      13738 elbo:     -13205 beta_elbo:     -13738 log_px:     -13072 log_qz:         20 log_pz:       -113 kl:        133   1
+[2K[2Kloss:      12375 elbo:     -11408 beta_elbo:     -12375 log_px:     -11166 log_qz:         53 log_pz:       -189 kl:        242   2
+[2K[2Kloss:        809 elbo:       5560 beta_elbo:       -809 log_px:       7152 log_qz:        148 log_pz:      -1444 kl:       1592   3
+[2K[2Kloss:     -34700 elbo:      60568 beta_elbo:      34700 log_px:      67035 log_qz:        255 log_pz:      -6212 kl:       6467   4
+[2K[2Kloss:     -80707 elbo:     131147 beta_elbo:      80707 log_px:     143758 log_qz:        329 log_pz:     -12281 kl:      12610   5
+[2K[2Kloss:    -146087 elbo:     229909 beta_elbo:     146087 log_px:     250864 log_qz:        399 log_pz:     -20556 kl:      20955   6
+[2K[2Kloss:    -218735 elbo:     338079 beta_elbo:     218735 log_px:     367915 log_qz:        464 log_pz:     -29372 kl:      29836   7
+[2K[2Kloss:    -309495 elbo:     472789 beta_elbo:     309495 log_px:     513613 log_qz:        526 log_pz:     -40297 kl:      40823   8
+[2K[2Kloss:    -434208 elbo:     656156 beta_elbo:     434208 log_px:     711643 log_qz:        589 log_pz:     -54898 kl:      55487   9
+[2K[2Kloss:    -564327 elbo:     853221 beta_elbo:     564327 log_px:     925445 log_qz:        645 log_pz:     -71578 kl:      72224  10
+[2K[2Kloss:    -735058 elbo:    1105551 beta_elbo:     735058 log_px:    1198174 log_qz:        709 log_pz:     -91915 kl:      92623  11
+Traceback (most recent call last):
+  File "/zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/VAE_train.py", line 90, in <module>
+    loss, diagnostics, outputs = vi(vae, x)
+  File "/zhome/99/d/155947/miniconda3/envs/VAE-env2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/small_VAE_code.py", line 178, in forward
+    log_pz = reduce(pz.log_prob(z))
+  File "/zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/small_VAE_code.py", line 43, in log_prob
+    return torch.distributions.normal.Normal(self.mu, self.sigma).log_prob(z) # <- your code
+  File "/zhome/99/d/155947/miniconda3/envs/VAE-env2/lib/python3.10/site-packages/torch/distributions/normal.py", line 79, in log_prob
+    self._validate_sample(value)
+  File "/zhome/99/d/155947/miniconda3/envs/VAE-env2/lib/python3.10/site-packages/torch/distributions/distribution.py", line 294, in _validate_sample
+    raise ValueError(
+ValueError: Expected value argument (Tensor of shape (5000, 16)) to be within the support (Real()) of the distribution Normal(loc: torch.Size([5000, 16]), scale: torch.Size([5000, 16])), but found invalid values:
+tensor([[nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        ...,
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan],
+        [nan, nan, nan,  ..., nan, nan, nan]], device='cuda:0',
+       dtype=torch.float64, grad_fn=<AddBackward0>)

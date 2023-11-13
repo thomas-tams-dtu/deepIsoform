@@ -3,7 +3,7 @@
 ### -- specify queue -- 
 #BSUB -q hpc
 ### -- set the job Name -- 
-#BSUB -J Test_out
+#BSUB -J gtex stratify
 ### -- ask for number of cores (default: 1) -- 
 #BSUB -n 1
 ### -- specify that the cores must be on the same host -- 
@@ -13,7 +13,7 @@
 ### -- specify that we want the job to get killed if it exceeds 100 GB per core/slot -- 
 #BSUB -M 100GB
 ### -- set walltime limit: hh:mm -- 
-#BSUB -W 23:00 
+#BSUB -W 02:00 
 ### -- set the email address -- 
 # please uncomment the following line and put in your e-mail address,
 # if you want to receive e-mail notifications on a non-default address
@@ -29,5 +29,7 @@
 
 # here follow the commands you want to execute with input.in as the input file
 source activate VAE-env2
-{ time /zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/small_VAE_test.py ; } 2> time_e50_d1000_100_l2000_1000_50.txt
 
+#{ time /zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/small_VAE_test.py ; } 2> time_e50_d1000_100_l2000_1000_50.txt
+
+/zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/create_hdf5_gtex.py

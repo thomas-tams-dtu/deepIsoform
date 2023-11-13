@@ -62,23 +62,24 @@ class VariationalAutoencoder(nn.Module):
         # Encode the observation `x` into the parameters of the posterior distribution
         # `q_\phi(z|x) = N(z | \mu(x), \sigma(x)), \mu(x),\log\sigma(x) = h_\phi(x)`
         self.encoder = nn.Sequential(
-            nn.Linear(in_features=self.observation_features, out_features=2000).double(),
+            nn.Dropout(0.5),
+            nn.Linear(in_features=self.observation_features, out_features=512).double(),
             nn.ReLU(),
-            nn.Linear(in_features=2000, out_features=1000).double(),
+            nn.Linear(in_features=512, out_features=128).double(),
             nn.ReLU(),
             # A Gaussian is fully characterised by its mean \mu and variance \sigma**2
-            nn.Linear(in_features=1000, out_features=2*latent_features).double() # <- note the 2*latent_features
+            nn.Linear(in_features=128, out_features=2*latent_features).double() # <- note the 2*latent_features
         )
 
         # Generative Model
         # Decode the latent sample `z` into the parameters of the observation model
         # `p_\theta(x | z) = \prod_i B(x_i | g_\theta(x))`
         self.decoder = nn.Sequential(
-            nn.Linear(in_features=latent_features, out_features=1000).double(),
+            nn.Linear(in_features=latent_features, out_features=128).double(),
             nn.ReLU(),
-            nn.Linear(in_features=1000, out_features=2000).double(),
+            nn.Linear(in_features=128, out_features=512).double(),
             nn.ReLU(),
-            nn.Linear(in_features=2000, out_features=self.observation_features).double()
+            nn.Linear(in_features=512, out_features=self.observation_features).double()
         )
 
         for layer in self.encoder:
@@ -181,11 +182,11 @@ class VariationalInference(nn.Module):
         # `L^\beta = E_q [ log p(x|z) ] - \beta * D_KL(q(z|x) | p(z))`
         # where `D_KL(q(z|x) | p(z)) = log q(z|x) - log p(z)
         kl = log_qz - log_pz
-        elbo = log_px - kl # <- your code here
+        elbo = -log_px - kl # <- your code here
         beta_elbo = log_px - self.beta*kl # <- your code here
 
         # loss # minus is there because we want to maximize and not minimize?
-        loss = -beta_elbo.mean()
+        loss = beta_elbo.mean()
 
         # prepare the output
         with torch.no_grad():

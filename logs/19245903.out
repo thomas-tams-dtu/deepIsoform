@@ -1,4 +1,4 @@
-Mon Nov  6 14:03:43 2023       
+Sun Nov 12 12:16:48 2023       
 +---------------------------------------------------------------------------------------+
 | NVIDIA-SMI 535.104.12             Driver Version: 535.104.12   CUDA Version: 12.2     |
 |-----------------------------------------+----------------------+----------------------+
@@ -7,7 +7,7 @@ Mon Nov  6 14:03:43 2023
 |                                         |                      |               MIG M. |
 |=========================================+======================+======================|
 |   0  Tesla V100-PCIE-32GB           On  | 00000000:58:00.0 Off |                    0 |
-| N/A   30C    P0              25W / 250W |      0MiB / 32768MiB |      0%   E. Process |
+| N/A   29C    P0              26W / 250W |      0MiB / 32768MiB |      0%   E. Process |
 |                                         |                      |                  N/A |
 +-----------------------------------------+----------------------+----------------------+
                                                                                          
@@ -65,79 +65,4 @@ Device 0: "Tesla V100-PCIE-32GB"
 
 deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = 12.2, CUDA Runtime Version = 11.6, NumDevs = 1
 Result = PASS
-MODEL_NAME          e_50_d900_100_l2000_1000_50
-NROWS_DATASET       1000
-NROWS_DATASET_TRAIN 900
-NROWS_DATASET_TEST  100
-CHUNK_SIZE          100
-BATCH_SIZE          50
-LATENT_FEATURES     50
-LEARNING_RATE       1e-05
-NUM_EPOCHS          50
-VariationalAutoencoder(
-  (encoder): Sequential(
-    (0): Linear(in_features=18965, out_features=2000, bias=True)
-    (1): ReLU()
-    (2): Linear(in_features=2000, out_features=1000, bias=True)
-    (3): ReLU()
-    (4): Linear(in_features=1000, out_features=100, bias=True)
-  )
-  (decoder): Sequential(
-    (0): Linear(in_features=50, out_features=1000, bias=True)
-    (1): ReLU()
-    (2): Linear(in_features=1000, out_features=2000, bias=True)
-    (3): ReLU()
-    (4): Linear(in_features=2000, out_features=18965, bias=True)
-  )
-)
->> Using device: cuda:0
-1 done
-2 done
-3 done
-4 done
-5 done
-6 done
-7 done
-8 done
-9 done
-10 done
-11 done
-12 done
-13 done
-14 done
-15 done
-16 done
-17 done
-18 done
-19 done
-20 done
-21 done
-22 done
-23 done
-24 done
-25 done
-26 done
-27 done
-28 done
-29 done
-30 done
-31 done
-32 done
-33 done
-34 done
-35 done
-36 done
-37 done
-38 done
-39 done
-40 done
-41 done
-42 done
-43 done
-44 done
-45 done
-46 done
-47 done
-48 done
-49 done
-50 done
+User defined signal 2

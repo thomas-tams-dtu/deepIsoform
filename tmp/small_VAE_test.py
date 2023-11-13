@@ -12,11 +12,11 @@ from small_VAE_code import VariationalAutoencoder, VariationalInference
 from collections import defaultdict
 
 
-NROWS_DATASET =         1000    # 167885
-NROWS_DATASET_TEST =    100          # 20000
+NROWS_DATASET =         167885    # 167885
+NROWS_DATASET_TEST =    20000     # 20000
 NROWS_DATASET_TRAIN =   NROWS_DATASET - NROWS_DATASET_TEST
-CHUNK_SIZE =            100
-BATCH_SIZE =            50
+CHUNK_SIZE =            50
+BATCH_SIZE =            10
 LATENT_FEATURES =       50
 LEARNING_RATE =         1e-5
 NUM_EPOCHS =            50
@@ -50,6 +50,8 @@ loader_train = DataLoader(GzChunks_train, batch_size=BATCH_SIZE)
 loader_test = DataLoader(GzChunks_test, batch_size=BATCH_SIZE)
 
 data_train, _ = next(iter(loader_train))
+
+data_train[0].size()
 
 # Define the models, evaluator and optimizer
 # VAE
