@@ -3,7 +3,7 @@
 ### –- specify queue --
 #BSUB -q gpuv100
 ### -- set the job Name --
-#BSUB -J PCA_train
+#BSUB -J dense_train
 ### -- ask for number of cores (default: 1) --
 #BSUB -n 4
 ### -- Select the resources: 1 gpu in exclusive process mode --
@@ -46,4 +46,6 @@ source activate VAE-env2
 #/zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/create_hdf5_archs.py
 #/zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/create_hdf5_gtex.py
 
-/zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/PCA_train.py
+#/zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/PCA_train.py
+
+/zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/dense_train.py

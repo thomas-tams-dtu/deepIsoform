@@ -9,9 +9,6 @@ from typing import *
 from FFNN import FeedForwardIsoform
 from collections import defaultdict
 import pickle
-import sys
-sys.path.insert(1, '/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts')
-from plotting import make_vae_plots
 
 
 def cross_entropy(ys, ts):
@@ -27,12 +24,15 @@ def accuracy(ys, ts):
     return torch.mean(correct_prediction.float())
 
 
-BATCH_SIZE = 50
+BATCH_SIZE = 500
 LATENT_FEATURES = 32
-LEARNING_RATE = 1e-5
-NUM_EPOCHS = 100
-MODEL_NAME = f'PCA_l{LATENT_FEATURES}_lr{LEARNING_RATE}_e{NUM_EPOCHS}'
+LEARNING_RATE = 1e-2
+WEIGHT_DECAY = 0.01
+NUM_EPOCHS = 2
+MODEL_NAME = f'PCA_DENSE_l{LATENT_FEATURES}_lr{LEARNING_RATE}_e{NUM_EPOCHS}'
 IPCA = f'/zhome/99/d/155947/DeeplearningProject/deepIsoform/models/ipca_model_n{LATENT_FEATURES}.pkl'
+
+print('model name', MODEL_NAME)
 
 # Load gtex datasets
 gtex_train = IsoDatasets.GtexDataset("/dtu-compute/datasets/iso_02456/hdf5/", exclude='brain')
@@ -59,7 +59,7 @@ print(FNN)
 criterion = torch.nn.CrossEntropyLoss()
 
 # The Adam optimizer works really well with VAEs.
-optimizer = torch.optim.Adam(FNN.parameters(), lr=LEARNING_RATE)
+optimizer = torch.optim.Adam(FNN.parameters(), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
 
 # define dictionary to store the training curves
 training_data =   [] #defaultdict(list)
@@ -122,12 +122,16 @@ while epoch < NUM_EPOCHS:
         # Calculate loss
         loss = criterion(x, y)
 
-        training_epoch_data.append(loss.mean().item())
+        validation_data.append(loss.mean().item())
 
-"""
-
-# Assuming 'model' is your PyTorch model
+### Saving model
+# Save path for model
 model_path = f'/zhome/99/d/155947/DeeplearningProject/deepIsoform/data/bhole_storage/models/{MODEL_NAME}'  # The file path to save the model
+
+init_values = {'batch_size': BATCH_SIZE,
+               'num_epochs': NUM_EPOCHS}
+
+layer_sizes = [(layer.in_features, layer.out_features) for layer in FNN.FNN]
 
 # Create a dictionary to save additional information (optional)
 info = {
@@ -135,16 +139,13 @@ info = {
     'init_values': init_values,
     'hyperparameters': {
         'learning_rate': LEARNING_RATE,
-        'batch_size': BATCH_SIZE,
-        'layer_size': [2000, 1000, LATENT_FEATURES]
+        'weight_decay': WEIGHT_DECAY,
+        'layer_size': layer_sizes
     },
-    'train_data': training_data,
-    'validation_data': validation_data
+    'train_loss': training_data,
+    'validation_loss': validation_data
 }
 
 # Save the model and additional information
-torch.save({
-    'model_state_dict': vae.state_dict(),
-    'info': info,
-}, model_path)
-"""
+torch.save({'model_state_dict': FNN.state_dict(), 'info': info,},
+            model_path)
