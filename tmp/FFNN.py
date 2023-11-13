@@ -19,13 +19,11 @@ class FeedForwardIsoform(nn.Module):
         self.output_features = np.prod(output_shape)
 
         self.FNN = nn.Sequential(
-            nn.Linear(in_features=self.input_features, out_features=512).double(),
+            nn.Linear(in_features=self.input_features, out_features=512),
             nn.ReLU(),
-            #nn.Linear(in_features=128, out_features=128).double(),
-            #nn.ReLU(),
-            nn.Linear(in_features=512, out_features=512).double(),
+            nn.Linear(in_features=512, out_features=512),
             nn.ReLU(),
-            nn.Linear(in_features=512, out_features=self.output_features).double()
+            nn.Linear(in_features=512, out_features=self.output_features)
         )
 
         for layer in self.FNN:

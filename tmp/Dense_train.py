@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
 import torch
-from sklearn.decomposition import PCA
+import IsoDatasets as IsoDatasets
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 import pandas as pd
 import numpy as np
 from typing import *
 from FFNN import FeedForwardIsoform
 from collections import defaultdict
+import pickle
 import sys
 sys.path.insert(1, '/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts')
 from hdf5_load import DatasetHDF5_gtex
@@ -26,42 +28,34 @@ def accuracy(ys, ts):
     # averaging the one-hot encoded vector
     return torch.mean(correct_prediction.float())
 
-# gtex_gene_expression_norm_transposed.tsv.gz :     The small paired dataset containing the gene expression  
-# gtex_isoform_expression_norm_transposed.tsv.gz :  The small paired dataset containing the isoform expression
-# gtex_gene_isoform_annoation.tsv.gz :              The gene-isoform relationship for the small paired dataset
-# gtex_annot.tsv.gz :                               The tissue type for each sample in the small dataset
-
 
 BATCH_SIZE = 200
-LATENT_FEATURES = 16
+LATENT_FEATURES = 32
 LEARNING_RATE = 1e-5
 NUM_EPOCHS = 100
 MODEL_NAME = f'PCA_l{LATENT_FEATURES}_lr{LEARNING_RATE}_e{NUM_EPOCHS}'
+IPCA = f'/zhome/99/d/155947/DeeplearningProject/deepIsoform/models/ipca_model_n{LATENT_FEATURES}_small.pkl'
 
-#hdf5_path_train = "/dtu/blackhole/0b/155947/train_gtex_geneX_isoformY.hdf5"
-#hdf5_path_val = "/dtu/blackhole/0b/155947/val_gtex_geneX_isoformY.hdf5"    
-#hdf5_path_test = "/dtu/blackhole/0b/155947/test_gtex_geneX_isoformY.hdf5"  
-#hdf5_dataset_train = DatasetHDF5(hdf5_path_train)                       
-#hdf5_dataset_val = DatasetHDF5(hdf5_path_val)  
-#hdf5_dataset_test = DatasetHDF5(hdf5_path_test)
-#
-#loader_train = DataLoader(hdf5_dataset_train, batch_size=BATCH_SIZE, shuffle=True)
-#loader_val = DataLoader(hdf5_dataset_val, batch_size=BATCH_SIZE, shuffle=True)
-#loader_test = DataLoader(hdf5_dataset_test, batch_size=BATCH_SIZE, shuffle=True)
+# Load gtex datasets
+gtex_train = IsoDatasets.GtexDataset("/dtu-compute/datasets/iso_02456/hdf5/", exclude='brain')
+gtex_test = IsoDatasets.GtexDataset("/dtu-compute/datasets/iso_02456/hdf5/", include='brain')
 
-hdf5_path_train = "/dtu/blackhole/0b/155947/all_gtex_geneX_isoformY2.hdf5"
-all_dataset = DatasetHDF5_gtex(hdf5_path_train)
-loader_train = DataLoader(all_dataset, batch_size=BATCH_SIZE, shuffle=True)
-loader_val = DataLoader(all_dataset, batch_size=BATCH_SIZE, shuffle=True)
+print("gtex training set size:", len(gtex_train))
+print("gtex test set size:", len(gtex_test))
 
+gtx_train_dataloader = DataLoader(gtex_train, batch_size=64, shuffle=True)
+gtx_test_dataloader = DataLoader(gtex_test, batch_size=64, shuffle=True)
 
-# Define feedfoward model
-sklearn_pca = PCA(n_components=LATENT_FEATURES)
+# Define PCA model
+with open(IPCA, 'rb') as file:
+    ipca = pickle.load(file)
 
-gene_expr, isoform_expr = next(iter(loader_train))
-FNN = FeedForwardIsoform(input_shape = gene_expr[0].size(), 
+# Define the Dense neural network
+gene_expr, isoform_expr = next(iter(gtx_train_dataloader))
+FNN = FeedForwardIsoform(input_shape = LATENT_FEATURES, 
                          output_shape = isoform_expr[0].size())
 
+print(FNN)
 
 # Loss function
 criterion = torch.nn.CrossEntropyLoss()
@@ -74,15 +68,12 @@ training_data = defaultdict(list)
 validation_data = defaultdict(list)
 
 
-print(FNN)
-
+# If GPU available send to gpu
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(f">> Using device: {device}")
 
 # move the model to the device
 FNN = FNN.to(device)
-
-
 
 # training..
 epoch = 0
@@ -93,37 +84,31 @@ while epoch < NUM_EPOCHS:
 
     # Go through each batch in the training dataset using the loader
     # Note that y is not necessarily known as it is here
-    for gene_expr, isoform_expr in loader_train:
-        x = sklearn_pca.fit_transform(gene_expr)
-        
-        break
-
-        x = x.double()
+    for x, y in tqdm(gtx_train_dataloader):
+        # Send to device and do PCA
         x = x.to(device)
+        x = ipca.fit_transform(x)
 
+        # Caculate loss and backprop
         loss = criterion(x, isoform_expr)
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
 
-        #training_epoch_data[k] += [v.mean().item()]
-    
-    break
-    #training_data[k] += [np.mean(training_epoch_data[k])]
+        training_epoch_data.append(loss.mean().item())
+
+    training_data.append(np.mean(training_epoch_data))
 
     # Evaluate on a single batch, do not propagate gradients
     with torch.no_grad():
         FNN.eval()
-        gene_expr, isoform_expr = next(iter(loader_test))
+        gene_expr, isoform_expr = next(iter(gtx_test_dataloader))
         
-        x = sklearn_pca.fit_transform(gene_expr)
-        
-        x = x.double()
         x = x.to(device)
-
+        x = ipca.fit_transform(x)
         loss = criterion(x, isoform_expr)
 
-        #training_epoch_data[k] += [loss.mean().item()]
+        training_epoch_data.append(loss.mean().item())
 
 """
 
