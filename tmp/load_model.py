@@ -2,30 +2,31 @@
 
 import torch
 from small_VAE_code import VariationalAutoencoder, VariationalInference
+from scripts.FFNN import FeedForwardIsoform
+from scripts.plot_loss import plot_loss
 
-loaded_model_path = '/zhome/99/d/155947/DeeplearningProject/deepIsoform/models/first_test_2000_1000_50'  # The file path where the model was saved
+
+loaded_model_path = '/zhome/99/d/155947/DeeplearningProject/deepIsoform/data/bhole_storage/models/PCA_DENSE_l32_lr0.01_e100'
 
 # Load the model and additional information
 checkpoint = torch.load(loaded_model_path)
 
-
 # Access additional information (optional)
 info = checkpoint.get('info')
 if info:
-    architecture = info.get('architecture')
+    MODEL_NAME = info.get('architecture')
     hyperparameters = info.get('hyperparameters')
     train_loss = info.get('train_loss')
-    val_loss = info.get('val_loss')
+    val_loss = info.get('validation_loss')
     init_values = info.get('init_values')
 
-# Create a new instance of your model
-model = VariationalAutoencoder(torch.Size([18965]), latent_features=hyperparameters['layer_size'][2])
 
-# Load the model's state dictionary
-model.load_state_dict(checkpoint['model_state_dict'])
+LATENT_FEATURES = hyperparameters['layer_size'][0][0]
+OUTPUT_FEATURES = hyperparameters['layer_size'][-1][1]
+FNN = FeedForwardIsoform(input_shape=LATENT_FEATURES, output_shape=OUTPUT_FEATURES)
+FNN.load_state_dict(checkpoint['model_state_dict'])
 
-for loss in train_loss:
-    print(loss)
+print(FNN)
 
-print(val_loss)
 
+plot_loss(training_loss=train_loss, validation_loss=val_loss, save_path=f'{MODEL_NAME}_loss_plot.png')
