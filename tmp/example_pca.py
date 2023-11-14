@@ -1,4 +1,4 @@
-import IsoDatasets as IsoDatasets
+import scripts.IsoDatasets as IsoDatasets
 from torch.utils.data import DataLoader
 from sklearn.decomposition import IncrementalPCA
 from tqdm import tqdm
