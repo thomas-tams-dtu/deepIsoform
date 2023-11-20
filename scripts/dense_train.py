@@ -17,7 +17,7 @@ import sys
 # Arguments
 parser = argparse.ArgumentParser(description='Training dense neural network')
 parser.add_argument('-ns', type=str, help='Network size. Choose between small, medium, large')
-parser.add_argument('-lf', type=int, help='Latents features used for encoding. Choose between 16, 32, 64, 128, 256')
+parser.add_argument('-lf', type=int, help='Latents features used for encoding. Choose between 16, 32, 64, 128, 256, 512, 1024')
 parser.add_argument('-wd', type=float, help='Weight decay used for Adam optimizer')
 parser.add_argument('--sm', action='store_true', help='Save model')
 args = parser.parse_args()
