@@ -182,11 +182,11 @@ class VariationalInference(nn.Module):
         # `L^\beta = E_q [ log p(x|z) ] - \beta * D_KL(q(z|x) | p(z))`
         # where `D_KL(q(z|x) | p(z)) = log q(z|x) - log p(z)
         kl = log_qz - log_pz
-        elbo = -log_px - kl # <- your code here
+        elbo = log_px - kl # <- your code here
         beta_elbo = log_px - self.beta*kl # <- your code here
 
         # loss # minus is there because we want to maximize and not minimize?
-        loss = beta_elbo.mean()
+        loss = -beta_elbo.mean()
 
         # prepare the output
         with torch.no_grad():

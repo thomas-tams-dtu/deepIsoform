@@ -1,294 +1,0 @@
-Thu Nov  9 21:28:21 2023       
-+---------------------------------------------------------------------------------------+
-| NVIDIA-SMI 535.104.12             Driver Version: 535.104.12   CUDA Version: 12.2     |
-|-----------------------------------------+----------------------+----------------------+
-| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
-| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
-|                                         |                      |               MIG M. |
-|=========================================+======================+======================|
-|   0  Tesla V100-PCIE-32GB           On  | 00000000:D8:00.0 Off |                    0 |
-| N/A   28C    P0              25W / 250W |      0MiB / 32768MiB |      0%   E. Process |
-|                                         |                      |                  N/A |
-+-----------------------------------------+----------------------+----------------------+
-                                                                                         
-+---------------------------------------------------------------------------------------+
-| Processes:                                                                            |
-|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
-|        ID   ID                                                             Usage      |
-|=======================================================================================|
-|  No running processes found                                                           |
-+---------------------------------------------------------------------------------------+
-Loaded module: cuda/11.6
-/appl/cuda/11.6.0/samples/bin/x86_64/linux/release/deviceQuery Starting...
-
- CUDA Device Query (Runtime API) version (CUDART static linking)
-
-Detected 1 CUDA Capable device(s)
-
-Device 0: "Tesla V100-PCIE-32GB"
-  CUDA Driver Version / Runtime Version          12.2 / 11.6
-  CUDA Capability Major/Minor version number:    7.0
-  Total amount of global memory:                 32501 MBytes (34079899648 bytes)
-  (080) Multiprocessors, (064) CUDA Cores/MP:    5120 CUDA Cores
-  GPU Max Clock rate:                            1380 MHz (1.38 GHz)
-  Memory Clock rate:                             877 Mhz
-  Memory Bus Width:                              4096-bit
-  L2 Cache Size:                                 6291456 bytes
-  Maximum Texture Dimension Size (x,y,z)         1D=(131072), 2D=(131072, 65536), 3D=(16384, 16384, 16384)
-  Maximum Layered 1D Texture Size, (num) layers  1D=(32768), 2048 layers
-  Maximum Layered 2D Texture Size, (num) layers  2D=(32768, 32768), 2048 layers
-  Total amount of constant memory:               65536 bytes
-  Total amount of shared memory per block:       49152 bytes
-  Total shared memory per multiprocessor:        98304 bytes
-  Total number of registers available per block: 65536
-  Warp size:                                     32
-  Maximum number of threads per multiprocessor:  2048
-  Maximum number of threads per block:           1024
-  Max dimension size of a thread block (x,y,z): (1024, 1024, 64)
-  Max dimension size of a grid size    (x,y,z): (2147483647, 65535, 65535)
-  Maximum memory pitch:                          2147483647 bytes
-  Texture alignment:                             512 bytes
-  Concurrent copy and kernel execution:          Yes with 7 copy engine(s)
-  Run time limit on kernels:                     No
-  Integrated GPU sharing Host Memory:            No
-  Support host page-locked memory mapping:       Yes
-  Alignment requirement for Surfaces:            Yes
-  Device has ECC support:                        Enabled
-  Device supports Unified Addressing (UVA):      Yes
-  Device supports Managed Memory:                Yes
-  Device supports Compute Preemption:            Yes
-  Supports Cooperative Kernel Launch:            Yes
-  Supports MultiDevice Co-op Kernel Launch:      Yes
-  Device PCI Domain ID / Bus ID / location ID:   0 / 216 / 0
-  Compute Mode:
-     < Exclusive Process (many threads in one process is able to use ::cudaSetDevice() with this device) >
-
-deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = 12.2, CUDA Runtime Version = 11.6, NumDevs = 1
-Result = PASS
-MODEL_NAME          e_100_d147885_20000_l512_128_16
-NROWS_DATASET       167885
-NROWS_DATASET_TRAIN 147885
-NROWS_DATASET_TEST  20000
-BATCH_SIZE          5000
-LATENT_FEATURES     16
-LEARNING_RATE       1e-05
-BETA                100
-NUM_EPOCHS          100
-VariationalAutoencoder(
-  (encoder): Sequential(
-    (0): Dropout(p=0.5, inplace=False)
-    (1): Linear(in_features=18965, out_features=512, bias=True)
-    (2): ReLU()
-    (3): Linear(in_features=512, out_features=128, bias=True)
-    (4): ReLU()
-    (5): Linear(in_features=128, out_features=32, bias=True)
-  )
-  (decoder): Sequential(
-    (0): Linear(in_features=16, out_features=128, bias=True)
-    (1): ReLU()
-    (2): Linear(in_features=128, out_features=512, bias=True)
-    (3): ReLU()
-    (4): Linear(in_features=512, out_features=18965, bias=True)
-  )
-)
->> Using device: cuda:0
-<IPython.core.display.Image object>
-[2K[2Kloss: 1601662552 elbo:  -16020626 beta_elbo: -1601662552 log_px:      -4041 log_qz:         24 log_pz:  -16016561 kl:   16016585   1
-<IPython.core.display.Image object>
-[2K[2Kloss:    8320216 elbo:     -92358 beta_elbo:   -8320216 log_px:      -9248 log_qz:         26 log_pz:     -83083 kl:      83110   2
-<IPython.core.display.Image object>
-[2K[2Kloss:    4876686 elbo:     -58422 beta_elbo:   -4876686 log_px:      -9753 log_qz:         26 log_pz:     -48643 kl:      48669   3
-<IPython.core.display.Image object>
-[2K[2Kloss:    5737270 elbo:     -66868 beta_elbo:   -5737270 log_px:      -9592 log_qz:         26 log_pz:     -57250 kl:      57277   4
-<IPython.core.display.Image object>
-[2K[2Kloss:    3388553 elbo:     -43536 beta_elbo:   -3388553 log_px:      -9748 log_qz:         27 log_pz:     -33761 kl:      33788   5
-<IPython.core.display.Image object>
-[2K[2Kloss:    6307335 elbo:     -72502 beta_elbo:   -6307335 log_px:      -9524 log_qz:         27 log_pz:     -62951 kl:      62978   6
-<IPython.core.display.Image object>
-[2K[2Kloss:    3623713 elbo:     -45661 beta_elbo:   -3623713 log_px:      -9519 log_qz:         27 log_pz:     -36115 kl:      36142   7
-<IPython.core.display.Image object>
-[2K[2Kloss:    4592886 elbo:     -55551 beta_elbo:   -4592886 log_px:      -9720 log_qz:         27 log_pz:     -45804 kl:      45832   8
-<IPython.core.display.Image object>
-[2K[2Kloss:    3213551 elbo:     -41758 beta_elbo:   -3213551 log_px:      -9720 log_qz:         27 log_pz:     -32011 kl:      32038   9
-<IPython.core.display.Image object>
-[2K[2Kloss:    5692802 elbo:     -66221 beta_elbo:   -5692802 log_px:      -9387 log_qz:         27 log_pz:     -56807 kl:      56834  10
-<IPython.core.display.Image object>
-[2K[2Kloss:    3236576 elbo:     -41953 beta_elbo:   -3236576 log_px:      -9684 log_qz:         27 log_pz:     -32242 kl:      32269  11
-<IPython.core.display.Image object>
-[2K[2Kloss:    2689529 elbo:     -36406 beta_elbo:   -2689529 log_px:      -9606 log_qz:         28 log_pz:     -26772 kl:      26799  12
-<IPython.core.display.Image object>
-[2K[2Kloss:    2384733 elbo:     -33516 beta_elbo:   -2384733 log_px:      -9767 log_qz:         28 log_pz:     -23722 kl:      23750  13
-<IPython.core.display.Image object>
-[2K[2Kloss:    2697356 elbo:     -36665 beta_elbo:   -2697356 log_px:      -9789 log_qz:         27 log_pz:     -26848 kl:      26876  14
-<IPython.core.display.Image object>
-[2K[2Kloss:    1889288 elbo:     -28581 beta_elbo:   -1889288 log_px:      -9786 log_qz:         28 log_pz:     -18767 kl:      18795  15
-<IPython.core.display.Image object>
-[2K[2Kloss:     868404 elbo:     -19028 beta_elbo:    -868404 log_px:     -10449 log_qz:         29 log_pz:      -8551 kl:       8580  16
-<IPython.core.display.Image object>
-[2K[2Kloss:     434724 elbo:     -15160 beta_elbo:    -434724 log_px:     -10922 log_qz:         30 log_pz:      -4208 kl:       4238  17
-<IPython.core.display.Image object>
-[2K[2Kloss:     339085 elbo:     -14262 beta_elbo:    -339085 log_px:     -10981 log_qz:         30 log_pz:      -3251 kl:       3281  18
-<IPython.core.display.Image object>
-[2K[2Kloss:     328255 elbo:     -14068 beta_elbo:    -328255 log_px:     -10895 log_qz:         30 log_pz:      -3144 kl:       3174  19
-<IPython.core.display.Image object>
-[2K[2Kloss:     544343 elbo:     -16173 beta_elbo:    -544343 log_px:     -10838 log_qz:         30 log_pz:      -5305 kl:       5335  20
-<IPython.core.display.Image object>
-[2K[2Kloss:     494278 elbo:     -15673 beta_elbo:    -494278 log_px:     -10838 log_qz:         30 log_pz:      -4804 kl:       4834  21
-<IPython.core.display.Image object>
-[2K[2Kloss:     312847 elbo:     -13893 beta_elbo:    -312847 log_px:     -10873 log_qz:         30 log_pz:      -2990 kl:       3020  22
-<IPython.core.display.Image object>
-[2K[2Kloss:     171919 elbo:     -12852 beta_elbo:    -171919 log_px:     -11245 log_qz:         31 log_pz:      -1576 kl:       1607  23
-<IPython.core.display.Image object>
-[2K[2Kloss:     148459 elbo:     -12629 beta_elbo:    -148459 log_px:     -11257 log_qz:         31 log_pz:      -1341 kl:       1372  24
-<IPython.core.display.Image object>
-[2K[2Kloss:     159251 elbo:     -12689 beta_elbo:    -159251 log_px:     -11209 log_qz:         31 log_pz:      -1449 kl:       1480  25
-<IPython.core.display.Image object>
-[2K[2Kloss:     144195 elbo:     -12524 beta_elbo:    -144195 log_px:     -11194 log_qz:         31 log_pz:      -1299 kl:       1330  26
-<IPython.core.display.Image object>
-[2K[2Kloss:     159549 elbo:     -12671 beta_elbo:    -159549 log_px:     -11187 log_qz:         31 log_pz:      -1452 kl:       1484  27
-<IPython.core.display.Image object>
-[2K[2Kloss:     152110 elbo:     -12603 beta_elbo:    -152110 log_px:     -11194 log_qz:         31 log_pz:      -1378 kl:       1409  28
-<IPython.core.display.Image object>
-[2K[2Kloss:      55473 elbo:     -11940 beta_elbo:     -55473 log_px:     -11500 log_qz:         30 log_pz:       -410 kl:        440  29
-<IPython.core.display.Image object>
-[2K[2Kloss:      50771 elbo:     -11894 beta_elbo:     -50771 log_px:     -11501 log_qz:         30 log_pz:       -363 kl:        393  30
-<IPython.core.display.Image object>
-[2K[2Kloss:      47783 elbo:     -11845 beta_elbo:     -47783 log_px:     -11482 log_qz:         30 log_pz:       -333 kl:        363  31
-<IPython.core.display.Image object>
-[2K[2Kloss:      57595 elbo:     -11885 beta_elbo:     -57595 log_px:     -11423 log_qz:         31 log_pz:       -431 kl:        462  32
-<IPython.core.display.Image object>
-[2K[2Kloss:      58485 elbo:     -11868 beta_elbo:     -58485 log_px:     -11397 log_qz:         32 log_pz:       -439 kl:        471  33
-<IPython.core.display.Image object>
-[2K[2Kloss:      56065 elbo:     -11836 beta_elbo:     -56065 log_px:     -11389 log_qz:         32 log_pz:       -415 kl:        447  34
-<IPython.core.display.Image object>
-[2K[2Kloss:      61310 elbo:     -11857 beta_elbo:     -61310 log_px:     -11358 log_qz:         32 log_pz:       -468 kl:        500  35
-<IPython.core.display.Image object>
-[2K[2Kloss:      64622 elbo:     -11848 beta_elbo:     -64622 log_px:     -11315 log_qz:         31 log_pz:       -502 kl:        533  36
-<IPython.core.display.Image object>
-[2K[2Kloss:      61574 elbo:     -11788 beta_elbo:     -61574 log_px:     -11286 log_qz:         31 log_pz:       -471 kl:        503  37
-<IPython.core.display.Image object>
-[2K[2Kloss:      78125 elbo:     -11827 beta_elbo:     -78125 log_px:     -11157 log_qz:         33 log_pz:       -637 kl:        670  38
-<IPython.core.display.Image object>
-[2K[2Kloss:     206726 elbo:     -12072 beta_elbo:    -206726 log_px:     -10106 log_qz:         47 log_pz:      -1919 kl:       1966  39
-<IPython.core.display.Image object>
-[2K[2Kloss:     293518 elbo:     -12814 beta_elbo:    -293518 log_px:      -9979 log_qz:         48 log_pz:      -2788 kl:       2835  40
-<IPython.core.display.Image object>
-[2K[2Kloss:     196726 elbo:     -11819 beta_elbo:    -196726 log_px:      -9952 log_qz:         47 log_pz:      -1820 kl:       1868  41
-<IPython.core.display.Image object>
-[2K[2Kloss:     292920 elbo:     -12686 beta_elbo:    -292920 log_px:      -9855 log_qz:         48 log_pz:      -2783 kl:       2831  42
-<IPython.core.display.Image object>
-[2K[2Kloss:     997528 elbo:     -19651 beta_elbo:    -997528 log_px:      -9774 log_qz:         48 log_pz:      -9830 kl:       9878  43
-<IPython.core.display.Image object>
-[2K[2Kloss:     734253 elbo:     -16950 beta_elbo:    -734253 log_px:      -9705 log_qz:         48 log_pz:      -7198 kl:       7245  44
-<IPython.core.display.Image object>
-[2K[2Kloss:     592940 elbo:     -15645 beta_elbo:    -592940 log_px:      -9814 log_qz:         48 log_pz:      -5784 kl:       5831  45
-<IPython.core.display.Image object>
-[2K[2Kloss:     165717 elbo:     -11500 beta_elbo:    -165717 log_px:      -9942 log_qz:         48 log_pz:      -1510 kl:       1558  46
-<IPython.core.display.Image object>
-[2K[2Kloss:     172716 elbo:     -11522 beta_elbo:    -172716 log_px:      -9894 log_qz:         48 log_pz:      -1580 kl:       1628  47
-<IPython.core.display.Image object>
-[2K[2Kloss:     166809 elbo:     -11401 beta_elbo:    -166809 log_px:      -9831 log_qz:         48 log_pz:      -1522 kl:       1570  48
-<IPython.core.display.Image object>
-[2K[2Kloss:     130392 elbo:     -11132 beta_elbo:    -130392 log_px:      -9927 log_qz:         48 log_pz:      -1156 kl:       1205  49
-<IPython.core.display.Image object>
-[2K[2Kloss:     131840 elbo:     -11149 beta_elbo:    -131840 log_px:      -9930 log_qz:         48 log_pz:      -1171 kl:       1219  50
-<IPython.core.display.Image object>
-[2K[2Kloss:     142003 elbo:     -11172 beta_elbo:    -142003 log_px:      -9851 log_qz:         48 log_pz:      -1273 kl:       1322  51
-<IPython.core.display.Image object>
-[2K[2Kloss:     146924 elbo:     -11181 beta_elbo:    -146924 log_px:      -9810 log_qz:         48 log_pz:      -1323 kl:       1371  52
-<IPython.core.display.Image object>
-[2K[2Kloss:     220435 elbo:     -12130 beta_elbo:    -220435 log_px:     -10026 log_qz:         49 log_pz:      -2055 kl:       2104  53
-<IPython.core.display.Image object>
-[2K[2Kloss:      91380 elbo:     -10901 beta_elbo:     -91380 log_px:     -10088 log_qz:         49 log_pz:       -764 kl:        813  54
-<IPython.core.display.Image object>
-[2K[2Kloss:      83920 elbo:     -10876 beta_elbo:     -83920 log_px:     -10138 log_qz:         49 log_pz:       -689 kl:        738  55
-<IPython.core.display.Image object>
-[2K[2Kloss:      84379 elbo:     -10831 beta_elbo:     -84379 log_px:     -10088 log_qz:         49 log_pz:       -694 kl:        743  56
-<IPython.core.display.Image object>
-[2K[2Kloss:     224644 elbo:     -12110 beta_elbo:    -224644 log_px:      -9963 log_qz:         49 log_pz:      -2098 kl:       2147  57
-<IPython.core.display.Image object>
-[2K[2Kloss:      80829 elbo:     -10716 beta_elbo:     -80829 log_px:     -10008 log_qz:         49 log_pz:       -659 kl:        708  58
-<IPython.core.display.Image object>
-[2K[2Kloss:      98322 elbo:     -10873 beta_elbo:     -98322 log_px:      -9990 log_qz:         49 log_pz:       -834 kl:        883  59
-<IPython.core.display.Image object>
-[2K[2Kloss:      51512 elbo:     -10557 beta_elbo:     -51512 log_px:     -10143 log_qz:         49 log_pz:       -365 kl:        414  60
-<IPython.core.display.Image object>
-[2K[2Kloss:      50635 elbo:     -10480 beta_elbo:     -50635 log_px:     -10074 log_qz:         49 log_pz:       -356 kl:        406  61
-<IPython.core.display.Image object>
-[2K[2Kloss:      45387 elbo:     -10452 beta_elbo:     -45387 log_px:     -10099 log_qz:         49 log_pz:       -304 kl:        353  62
-<IPython.core.display.Image object>
-[2K[2Kloss:      44637 elbo:     -10438 beta_elbo:     -44637 log_px:     -10093 log_qz:         49 log_pz:       -297 kl:        345  63
-<IPython.core.display.Image object>
-[2K[2Kloss:      46375 elbo:     -10435 beta_elbo:     -46375 log_px:     -10072 log_qz:         49 log_pz:       -314 kl:        363  64
-<IPython.core.display.Image object>
-[2K[2Kloss:     122092 elbo:     -11067 beta_elbo:    -122092 log_px:      -9946 log_qz:         49 log_pz:      -1073 kl:       1121  65
-<IPython.core.display.Image object>
-[2K[2Kloss:      59516 elbo:     -10476 beta_elbo:     -59516 log_px:      -9981 log_qz:         49 log_pz:       -446 kl:        495  66
-<IPython.core.display.Image object>
-[2K[2Kloss:      54848 elbo:     -10415 beta_elbo:     -54848 log_px:      -9966 log_qz:         49 log_pz:       -400 kl:        449  67
-<IPython.core.display.Image object>
-[2K[2Kloss:      50898 elbo:     -10367 beta_elbo:     -50898 log_px:      -9958 log_qz:         49 log_pz:       -361 kl:        409  68
-<IPython.core.display.Image object>
-[2K[2Kloss:      48228 elbo:     -10325 beta_elbo:     -48228 log_px:      -9942 log_qz:         49 log_pz:       -334 kl:        383  69
-<IPython.core.display.Image object>
-[2K[2Kloss:      52501 elbo:     -10295 beta_elbo:     -52501 log_px:      -9868 log_qz:         49 log_pz:       -377 kl:        426  70
-<IPython.core.display.Image object>
-[2K[2Kloss:      47829 elbo:     -10279 beta_elbo:     -47829 log_px:      -9900 log_qz:         49 log_pz:       -330 kl:        379  71
-<IPython.core.display.Image object>
-[2K[2Kloss:      38291 elbo:     -10287 beta_elbo:     -38291 log_px:     -10004 log_qz:         50 log_pz:       -233 kl:        283  72
-<IPython.core.display.Image object>
-[2K[2Kloss:      38267 elbo:     -10280 beta_elbo:     -38267 log_px:      -9998 log_qz:         50 log_pz:       -232 kl:        283  73
-<IPython.core.display.Image object>
-[2K[2Kloss:      41159 elbo:     -10264 beta_elbo:     -41159 log_px:      -9952 log_qz:         51 log_pz:       -261 kl:        312  74
-<IPython.core.display.Image object>
-[2K[2Kloss:      37324 elbo:     -10226 beta_elbo:     -37324 log_px:      -9952 log_qz:         51 log_pz:       -223 kl:        274  75
-<IPython.core.display.Image object>
-[2K[2Kloss:      35667 elbo:     -10171 beta_elbo:     -35667 log_px:      -9914 log_qz:         51 log_pz:       -207 kl:        258  76
-<IPython.core.display.Image object>
-[2K[2Kloss:      36056 elbo:     -10146 beta_elbo:     -36056 log_px:      -9884 log_qz:         51 log_pz:       -211 kl:        262  77
-<IPython.core.display.Image object>
-[2K[2Kloss:      35356 elbo:     -10130 beta_elbo:     -35356 log_px:      -9875 log_qz:         51 log_pz:       -204 kl:        255  78
-<IPython.core.display.Image object>
-[2K[2Kloss:      35209 elbo:     -10124 beta_elbo:     -35209 log_px:      -9870 log_qz:         50 log_pz:       -203 kl:        253  79
-<IPython.core.display.Image object>
-[2K[2Kloss:      35464 elbo:     -10082 beta_elbo:     -35464 log_px:      -9825 log_qz:         51 log_pz:       -206 kl:        256  80
-<IPython.core.display.Image object>
-[2K[2Kloss:      34916 elbo:     -10164 beta_elbo:     -34916 log_px:      -9914 log_qz:         52 log_pz:       -198 kl:        250  81
-<IPython.core.display.Image object>
-[2K[2Kloss:      36420 elbo:     -10132 beta_elbo:     -36420 log_px:      -9867 log_qz:         53 log_pz:       -213 kl:        266  82
-<IPython.core.display.Image object>
-[2K[2Kloss:      35423 elbo:     -10125 beta_elbo:     -35423 log_px:      -9870 log_qz:         53 log_pz:       -203 kl:        256  83
-<IPython.core.display.Image object>
-[2K[2Kloss:      35233 elbo:     -10100 beta_elbo:     -35233 log_px:      -9846 log_qz:         53 log_pz:       -201 kl:        254  84
-<IPython.core.display.Image object>
-[2K[2Kloss:      34912 elbo:     -10079 beta_elbo:     -34912 log_px:      -9828 log_qz:         53 log_pz:       -198 kl:        251  85
-<IPython.core.display.Image object>
-[2K[2Kloss:      34786 elbo:     -10073 beta_elbo:     -34786 log_px:      -9823 log_qz:         53 log_pz:       -197 kl:        250  86
-<IPython.core.display.Image object>
-[2K[2Kloss:      34816 elbo:     -10028 beta_elbo:     -34816 log_px:      -9778 log_qz:         53 log_pz:       -198 kl:        250  87
-<IPython.core.display.Image object>
-[2K[2Kloss:      34681 elbo:     -10018 beta_elbo:     -34681 log_px:      -9769 log_qz:         53 log_pz:       -196 kl:        249  88
-<IPython.core.display.Image object>
-[2K[2Kloss:      34736 elbo:      -9997 beta_elbo:     -34736 log_px:      -9747 log_qz:         53 log_pz:       -197 kl:        250  89
-<IPython.core.display.Image object>
-[2K[2Kloss:      34600 elbo:      -9982 beta_elbo:     -34600 log_px:      -9734 log_qz:         52 log_pz:       -196 kl:        249  90
-<IPython.core.display.Image object>
-[2K[2Kloss:      34891 elbo:      -9949 beta_elbo:     -34891 log_px:      -9697 log_qz:         53 log_pz:       -199 kl:        252  91
-<IPython.core.display.Image object>
-[2K[2Kloss:      34800 elbo:      -9931 beta_elbo:     -34800 log_px:      -9680 log_qz:         52 log_pz:       -199 kl:        251  92
-<IPython.core.display.Image object>
-[2K[2Kloss:      34332 elbo:      -9905 beta_elbo:     -34332 log_px:      -9658 log_qz:         53 log_pz:       -194 kl:        247  93
-<IPython.core.display.Image object>
-[2K[2Kloss:      34756 elbo:      -9874 beta_elbo:     -34756 log_px:      -9623 log_qz:         53 log_pz:       -199 kl:        251  94
-<IPython.core.display.Image object>
-[2K[2Kloss:      34323 elbo:      -9845 beta_elbo:     -34323 log_px:      -9598 log_qz:         53 log_pz:       -195 kl:        247  95
-<IPython.core.display.Image object>
-[2K[2Kloss:      34305 elbo:      -9818 beta_elbo:     -34305 log_px:      -9571 log_qz:         53 log_pz:       -194 kl:        247  96
-<IPython.core.display.Image object>
-[2K[2Kloss:      34432 elbo:      -9818 beta_elbo:     -34432 log_px:      -9569 log_qz:         52 log_pz:       -196 kl:        249  97
-<IPython.core.display.Image object>
-[2K[2Kloss:      34288 elbo:      -9775 beta_elbo:     -34288 log_px:      -9527 log_qz:         53 log_pz:       -195 kl:        248  98
-<IPython.core.display.Image object>
-[2K[2Kloss:      34680 elbo:      -9738 beta_elbo:     -34680 log_px:      -9486 log_qz:         53 log_pz:       -199 kl:        252  99
-<IPython.core.display.Image object>
-[2K[2Kloss:      34060 elbo:      -9737 beta_elbo:     -34060 log_px:      -9491 log_qz:         52 log_pz:       -193 kl:        246 100
