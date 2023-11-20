@@ -17,7 +17,7 @@ def plot_loss(training_loss, validation_loss, save_path="loss_plot.png"):
     plt.plot(epochs, validation_loss, label='Validation Loss')
 
     plt.title('Training and Validation Loss')
-    plt.suptitle(f'Average last 10 val {np.mean(validation_loss[-10:])}. Average last 10 train {np.mean(training_loss[-10:])}')
+    plt.suptitle(f'Average last 10 val {np.min(validation_loss)}. Average last 10 train {np.min(training_loss)}')
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.legend()
