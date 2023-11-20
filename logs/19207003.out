@@ -1,194 +1,0 @@
-Thu Nov  9 22:46:14 2023       
-+---------------------------------------------------------------------------------------+
-| NVIDIA-SMI 535.104.12             Driver Version: 535.104.12   CUDA Version: 12.2     |
-|-----------------------------------------+----------------------+----------------------+
-| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
-| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
-|                                         |                      |               MIG M. |
-|=========================================+======================+======================|
-|   0  Tesla V100-SXM2-32GB           On  | 00000000:3A:00.0 Off |                    0 |
-| N/A   32C    P0              41W / 300W |      0MiB / 32768MiB |      0%   E. Process |
-|                                         |                      |                  N/A |
-+-----------------------------------------+----------------------+----------------------+
-                                                                                         
-+---------------------------------------------------------------------------------------+
-| Processes:                                                                            |
-|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
-|        ID   ID                                                             Usage      |
-|=======================================================================================|
-|  No running processes found                                                           |
-+---------------------------------------------------------------------------------------+
-Loaded module: cuda/11.6
-/appl/cuda/11.6.0/samples/bin/x86_64/linux/release/deviceQuery Starting...
-
- CUDA Device Query (Runtime API) version (CUDART static linking)
-
-Detected 1 CUDA Capable device(s)
-
-Device 0: "Tesla V100-SXM2-32GB"
-  CUDA Driver Version / Runtime Version          12.2 / 11.6
-  CUDA Capability Major/Minor version number:    7.0
-  Total amount of global memory:                 32501 MBytes (34079899648 bytes)
-  (080) Multiprocessors, (064) CUDA Cores/MP:    5120 CUDA Cores
-  GPU Max Clock rate:                            1530 MHz (1.53 GHz)
-  Memory Clock rate:                             877 Mhz
-  Memory Bus Width:                              4096-bit
-  L2 Cache Size:                                 6291456 bytes
-  Maximum Texture Dimension Size (x,y,z)         1D=(131072), 2D=(131072, 65536), 3D=(16384, 16384, 16384)
-  Maximum Layered 1D Texture Size, (num) layers  1D=(32768), 2048 layers
-  Maximum Layered 2D Texture Size, (num) layers  2D=(32768, 32768), 2048 layers
-  Total amount of constant memory:               65536 bytes
-  Total amount of shared memory per block:       49152 bytes
-  Total shared memory per multiprocessor:        98304 bytes
-  Total number of registers available per block: 65536
-  Warp size:                                     32
-  Maximum number of threads per multiprocessor:  2048
-  Maximum number of threads per block:           1024
-  Max dimension size of a thread block (x,y,z): (1024, 1024, 64)
-  Max dimension size of a grid size    (x,y,z): (2147483647, 65535, 65535)
-  Maximum memory pitch:                          2147483647 bytes
-  Texture alignment:                             512 bytes
-  Concurrent copy and kernel execution:          Yes with 5 copy engine(s)
-  Run time limit on kernels:                     No
-  Integrated GPU sharing Host Memory:            No
-  Support host page-locked memory mapping:       Yes
-  Alignment requirement for Surfaces:            Yes
-  Device has ECC support:                        Enabled
-  Device supports Unified Addressing (UVA):      Yes
-  Device supports Managed Memory:                Yes
-  Device supports Compute Preemption:            Yes
-  Supports Cooperative Kernel Launch:            Yes
-  Supports MultiDevice Co-op Kernel Launch:      Yes
-  Device PCI Domain ID / Bus ID / location ID:   0 / 58 / 0
-  Compute Mode:
-     < Exclusive Process (many threads in one process is able to use ::cudaSetDevice() with this device) >
-
-deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = 12.2, CUDA Runtime Version = 11.6, NumDevs = 1
-Result = PASS
-MODEL_NAME          e_100_b20_l1e-05_t20000_l512_128_16
-NROWS_DATASET       167885
-NROWS_DATASET_TRAIN 147885
-NROWS_DATASET_TEST  20000
-BATCH_SIZE          5000
-LATENT_FEATURES     16
-LEARNING_RATE       1e-05
-BETA                20
-NUM_EPOCHS          100
-VariationalAutoencoder(
-  (encoder): Sequential(
-    (0): Dropout(p=0.5, inplace=False)
-    (1): Linear(in_features=18965, out_features=512, bias=True)
-    (2): ReLU()
-    (3): Linear(in_features=512, out_features=128, bias=True)
-    (4): ReLU()
-    (5): Linear(in_features=128, out_features=32, bias=True)
-  )
-  (decoder): Sequential(
-    (0): Linear(in_features=16, out_features=128, bias=True)
-    (1): ReLU()
-    (2): Linear(in_features=128, out_features=512, bias=True)
-    (3): ReLU()
-    (4): Linear(in_features=512, out_features=18965, bias=True)
-  )
-)
->> Using device: cuda:0
-[2K[2Kloss:    4859743 elbo:    -257026 beta_elbo:   -4859743 log_px:     -14778 log_qz:        -23 log_pz:    -242271 kl:     242248   1
-[2K[2Kloss:    4369500 elbo:    -230538 beta_elbo:   -4369500 log_px:     -12698 log_qz:        -22 log_pz:    -217862 kl:     217840   2
-[2K[2Kloss:      94663 elbo:     -16045 beta_elbo:     -94663 log_px:     -11907 log_qz:        -19 log_pz:      -4157 kl:       4138   3
-[2K[2Kloss:     103133 elbo:     -16415 beta_elbo:    -103133 log_px:     -11851 log_qz:        -19 log_pz:      -4583 kl:       4564   4
-[2K[2Kloss:      41863 elbo:     -13440 beta_elbo:     -41863 log_px:     -11944 log_qz:        -17 log_pz:      -1513 kl:       1496   5
-[2K[2Kloss:      36163 elbo:     -13192 beta_elbo:     -36163 log_px:     -11983 log_qz:        -17 log_pz:      -1226 kl:       1209   6
-[2K[2Kloss:      31842 elbo:     -12943 beta_elbo:     -31842 log_px:     -11948 log_qz:        -16 log_pz:      -1011 kl:        995   7
-[2K[2Kloss:      31473 elbo:     -12904 beta_elbo:     -31473 log_px:     -11927 log_qz:        -16 log_pz:       -993 kl:        977   8
-[2K[2Kloss:      30118 elbo:     -12823 beta_elbo:     -30118 log_px:     -11913 log_qz:        -15 log_pz:       -926 kl:        910   9
-[2K[2Kloss:      29718 elbo:     -12813 beta_elbo:     -29718 log_px:     -11924 log_qz:        -15 log_pz:       -905 kl:        890  10
-[2K[2Kloss:      42258 elbo:     -13409 beta_elbo:     -42258 log_px:     -11890 log_qz:        -15 log_pz:      -1534 kl:       1518  11
-[2K[2Kloss:      26547 elbo:     -12631 beta_elbo:     -26547 log_px:     -11898 log_qz:        -15 log_pz:       -747 kl:        732  12
-[2K[2Kloss:      31964 elbo:     -12874 beta_elbo:     -31964 log_px:     -11869 log_qz:        -15 log_pz:      -1020 kl:       1005  13
-[2K[2Kloss:      34067 elbo:     -12946 beta_elbo:     -34067 log_px:     -11834 log_qz:        -15 log_pz:      -1127 kl:       1112  14
-[2K[2Kloss:      28688 elbo:     -12673 beta_elbo:     -28688 log_px:     -11830 log_qz:        -15 log_pz:       -858 kl:        843  15
-[2K[2Kloss:      21433 elbo:     -12366 beta_elbo:     -21433 log_px:     -11889 log_qz:        -13 log_pz:       -491 kl:        477  16
-[2K[2Kloss:      20387 elbo:     -12316 beta_elbo:     -20387 log_px:     -11891 log_qz:        -12 log_pz:       -437 kl:        425  17
-[2K[2Kloss:      21674 elbo:     -12364 beta_elbo:     -21674 log_px:     -11874 log_qz:        -12 log_pz:       -502 kl:        490  18
-[2K[2Kloss:      44590 elbo:     -13480 beta_elbo:     -44590 log_px:     -11843 log_qz:        -12 log_pz:      -1650 kl:       1637  19
-[2K[2Kloss:      20113 elbo:     -12255 beta_elbo:     -20113 log_px:     -11842 log_qz:        -12 log_pz:       -426 kl:        414  20
-[2K[2Kloss:      20393 elbo:     -12239 beta_elbo:     -20393 log_px:     -11810 log_qz:        -12 log_pz:       -441 kl:        429  21
-[2K[2Kloss:      19685 elbo:     -12179 beta_elbo:     -19685 log_px:     -11784 log_qz:        -12 log_pz:       -407 kl:        395  22
-[2K[2Kloss:      19513 elbo:     -12152 beta_elbo:     -19513 log_px:     -11765 log_qz:        -11 log_pz:       -398 kl:        387  23
-[2K[2Kloss:      19801 elbo:     -12078 beta_elbo:     -19801 log_px:     -11672 log_qz:         -8 log_pz:       -415 kl:        406  24
-[2K[2Kloss:      18273 elbo:     -11965 beta_elbo:     -18273 log_px:     -11633 log_qz:         -7 log_pz:       -339 kl:        332  25
-[2K[2Kloss:      17969 elbo:     -11924 beta_elbo:     -17969 log_px:     -11606 log_qz:         -7 log_pz:       -326 kl:        318  26
-[2K[2Kloss:      18990 elbo:     -11936 beta_elbo:     -18990 log_px:     -11564 log_qz:         -7 log_pz:       -379 kl:        371  27
-[2K[2Kloss:      18397 elbo:     -11890 beta_elbo:     -18397 log_px:     -11547 log_qz:         -8 log_pz:       -350 kl:        342  28
-[2K[2Kloss:      18631 elbo:     -11863 beta_elbo:     -18631 log_px:     -11507 log_qz:         -7 log_pz:       -364 kl:        356  29
-[2K[2Kloss:      19009 elbo:     -11875 beta_elbo:     -19009 log_px:     -11499 log_qz:         -7 log_pz:       -383 kl:        375  30
-[2K[2Kloss:      18701 elbo:     -11828 beta_elbo:     -18701 log_px:     -11466 log_qz:         -7 log_pz:       -369 kl:        362  31
-[2K[2Kloss:      19189 elbo:     -11827 beta_elbo:     -19189 log_px:     -11439 log_qz:         -7 log_pz:       -395 kl:        388  32
-[2K[2Kloss:      19063 elbo:     -11800 beta_elbo:     -19063 log_px:     -11418 log_qz:         -8 log_pz:       -390 kl:        382  33
-[2K[2Kloss:      18326 elbo:     -11726 beta_elbo:     -18326 log_px:     -11379 log_qz:         -7 log_pz:       -355 kl:        347  34
-[2K[2Kloss:      18305 elbo:     -11707 beta_elbo:     -18305 log_px:     -11359 log_qz:         -8 log_pz:       -355 kl:        347  35
-[2K[2Kloss:      18180 elbo:     -11654 beta_elbo:     -18180 log_px:     -11310 log_qz:         -7 log_pz:       -351 kl:        343  36
-[2K[2Kloss:      18764 elbo:     -11667 beta_elbo:     -18764 log_px:     -11293 log_qz:         -7 log_pz:       -381 kl:        374  37
-[2K[2Kloss:      18180 elbo:     -11614 beta_elbo:     -18180 log_px:     -11268 log_qz:         -8 log_pz:       -353 kl:        346  38
-[2K[2Kloss:      18618 elbo:     -11572 beta_elbo:     -18618 log_px:     -11201 log_qz:         -7 log_pz:       -378 kl:        371  39
-[2K[2Kloss:      18683 elbo:     -11576 beta_elbo:     -18683 log_px:     -11202 log_qz:         -7 log_pz:       -381 kl:        374  40
-[2K[2Kloss:      18791 elbo:     -11555 beta_elbo:     -18791 log_px:     -11174 log_qz:         -7 log_pz:       -388 kl:        381  41
-[2K[2Kloss:      18849 elbo:     -11539 beta_elbo:     -18849 log_px:     -11154 log_qz:         -7 log_pz:       -392 kl:        385  42
-[2K[2Kloss:      18014 elbo:     -11469 beta_elbo:     -18014 log_px:     -11124 log_qz:         -6 log_pz:       -351 kl:        345  43
-[2K[2Kloss:      17653 elbo:     -11427 beta_elbo:     -17653 log_px:     -11099 log_qz:         -6 log_pz:       -334 kl:        328  44
-[2K[2Kloss:      17032 elbo:     -11367 beta_elbo:     -17032 log_px:     -11069 log_qz:         -6 log_pz:       -304 kl:        298  45
-[2K[2Kloss:      17237 elbo:     -11389 beta_elbo:     -17237 log_px:     -11081 log_qz:         -6 log_pz:       -313 kl:        308  46
-[2K[2Kloss:      17534 elbo:     -11407 beta_elbo:     -17534 log_px:     -11084 log_qz:         -6 log_pz:       -328 kl:        322  47
-[2K[2Kloss:      17103 elbo:     -11351 beta_elbo:     -17103 log_px:     -11048 log_qz:         -6 log_pz:       -308 kl:        303  48
-[2K[2Kloss:      17448 elbo:     -11347 beta_elbo:     -17448 log_px:     -11026 log_qz:         -6 log_pz:       -327 kl:        321  49
-[2K[2Kloss:      17014 elbo:     -11303 beta_elbo:     -17014 log_px:     -11003 log_qz:         -6 log_pz:       -306 kl:        301  50
-[2K[2Kloss:      16998 elbo:     -11292 beta_elbo:     -16998 log_px:     -10992 log_qz:         -5 log_pz:       -306 kl:        300  51
-[2K[2Kloss:      16720 elbo:     -11270 beta_elbo:     -16720 log_px:     -10983 log_qz:         -6 log_pz:       -292 kl:        287  52
-[2K[2Kloss:      18103 elbo:     -11293 beta_elbo:     -18103 log_px:     -10935 log_qz:         -6 log_pz:       -364 kl:        358  53
-[2K[2Kloss:      17308 elbo:     -11253 beta_elbo:     -17308 log_px:     -10934 log_qz:         -6 log_pz:       -324 kl:        319  54
-[2K[2Kloss:      17453 elbo:     -11241 beta_elbo:     -17453 log_px:     -10914 log_qz:         -6 log_pz:       -333 kl:        327  55
-[2K[2Kloss:      17251 elbo:     -11201 beta_elbo:     -17251 log_px:     -10883 log_qz:         -6 log_pz:       -324 kl:        318  56
-[2K[2Kloss:      17075 elbo:     -11177 beta_elbo:     -17075 log_px:     -10866 log_qz:         -6 log_pz:       -316 kl:        310  57
-[2K[2Kloss:      17077 elbo:     -11129 beta_elbo:     -17077 log_px:     -10816 log_qz:         -6 log_pz:       -319 kl:        313  58
-[2K[2Kloss:      16702 elbo:     -11129 beta_elbo:     -16702 log_px:     -10836 log_qz:         -6 log_pz:       -299 kl:        293  59
-[2K[2Kloss:      17073 elbo:     -11100 beta_elbo:     -17073 log_px:     -10785 log_qz:         -6 log_pz:       -320 kl:        314  60
-[2K[2Kloss:      17034 elbo:     -11074 beta_elbo:     -17034 log_px:     -10760 log_qz:         -6 log_pz:       -319 kl:        314  61
-[2K[2Kloss:      16592 elbo:     -11056 beta_elbo:     -16592 log_px:     -10765 log_qz:         -6 log_pz:       -297 kl:        291  62
-[2K[2Kloss:      16704 elbo:     -11029 beta_elbo:     -16704 log_px:     -10730 log_qz:         -6 log_pz:       -304 kl:        299  63
-[2K[2Kloss:      17513 elbo:     -11058 beta_elbo:     -17513 log_px:     -10718 log_qz:         -5 log_pz:       -345 kl:        340  64
-[2K[2Kloss:      16661 elbo:     -11005 beta_elbo:     -16661 log_px:     -10707 log_qz:         -5 log_pz:       -303 kl:        298  65
-[2K[2Kloss:      17210 elbo:     -11016 beta_elbo:     -17210 log_px:     -10690 log_qz:         -5 log_pz:       -331 kl:        326  66
-[2K[2Kloss:      16572 elbo:     -10973 beta_elbo:     -16572 log_px:     -10679 log_qz:         -5 log_pz:       -300 kl:        295  67
-[2K[2Kloss:      16303 elbo:     -10926 beta_elbo:     -16303 log_px:     -10643 log_qz:         -5 log_pz:       -288 kl:        283  68
-[2K[2Kloss:      16073 elbo:     -10923 beta_elbo:     -16073 log_px:     -10652 log_qz:         -5 log_pz:       -276 kl:        271  69
-[2K[2Kloss:      17030 elbo:     -10938 beta_elbo:     -17030 log_px:     -10618 log_qz:         -5 log_pz:       -325 kl:        321  70
-[2K[2Kloss:      16023 elbo:     -10888 beta_elbo:     -16023 log_px:     -10617 log_qz:         -4 log_pz:       -275 kl:        270  71
-[2K[2Kloss:      15941 elbo:     -10864 beta_elbo:     -15941 log_px:     -10597 log_qz:         -4 log_pz:       -272 kl:        267  72
-[2K[2Kloss:      16512 elbo:     -10836 beta_elbo:     -16512 log_px:     -10538 log_qz:         -4 log_pz:       -303 kl:        299  73
-[2K[2Kloss:      16050 elbo:     -10824 beta_elbo:     -16050 log_px:     -10549 log_qz:         -4 log_pz:       -279 kl:        275  74
-[2K[2Kloss:      15893 elbo:     -10784 beta_elbo:     -15893 log_px:     -10515 log_qz:         -4 log_pz:       -273 kl:        269  75
-[2K[2Kloss:      16428 elbo:     -10792 beta_elbo:     -16428 log_px:     -10496 log_qz:         -4 log_pz:       -301 kl:        297  76
-[2K[2Kloss:      16904 elbo:     -10777 beta_elbo:     -16904 log_px:     -10454 log_qz:         -4 log_pz:       -327 kl:        323  77
-[2K[2Kloss:      15780 elbo:     -10703 beta_elbo:     -15780 log_px:     -10436 log_qz:         -4 log_pz:       -271 kl:        267  78
-[2K[2Kloss:      17139 elbo:     -10752 beta_elbo:     -17139 log_px:     -10416 log_qz:         -4 log_pz:       -340 kl:        336  79
-[2K[2Kloss:      15691 elbo:     -10640 beta_elbo:     -15691 log_px:     -10374 log_qz:         -4 log_pz:       -270 kl:        266  80
-[2K[2Kloss:      15706 elbo:     -10614 beta_elbo:     -15706 log_px:     -10346 log_qz:         -4 log_pz:       -272 kl:        268  81
-[2K[2Kloss:      16242 elbo:     -10594 beta_elbo:     -16242 log_px:     -10297 log_qz:         -4 log_pz:       -301 kl:        297  82
-[2K[2Kloss:      16414 elbo:     -10583 beta_elbo:     -16414 log_px:     -10276 log_qz:         -4 log_pz:       -311 kl:        307  83
-[2K[2Kloss:      15224 elbo:     -10549 beta_elbo:     -15224 log_px:     -10303 log_qz:         -4 log_pz:       -250 kl:        246  84
-[2K[2Kloss:      16886 elbo:     -10557 beta_elbo:     -16886 log_px:     -10223 log_qz:         -4 log_pz:       -337 kl:        333  85
-[2K[2Kloss:      16296 elbo:     -10507 beta_elbo:     -16296 log_px:     -10202 log_qz:         -4 log_pz:       -309 kl:        305  86
-[2K[2Kloss:      16322 elbo:     -10439 beta_elbo:     -16322 log_px:     -10130 log_qz:         -4 log_pz:       -314 kl:        310  87
-[2K[2Kloss:      15974 elbo:     -10340 beta_elbo:     -15974 log_px:     -10043 log_qz:         -5 log_pz:       -301 kl:        297  88
-[2K[2Kloss:      15738 elbo:     -10296 beta_elbo:     -15738 log_px:     -10010 log_qz:         -5 log_pz:       -291 kl:        286  89
-[2K[2Kloss:      15171 elbo:     -10266 beta_elbo:     -15171 log_px:     -10007 log_qz:         -4 log_pz:       -262 kl:        258  90
-[2K[2Kloss:      16709 elbo:     -10299 beta_elbo:     -16709 log_px:      -9962 log_qz:         -4 log_pz:       -341 kl:        337  91
-[2K[2Kloss:      15697 elbo:     -10213 beta_elbo:     -15697 log_px:      -9924 log_qz:         -4 log_pz:       -293 kl:        289  92
-[2K[2Kloss:      15023 elbo:     -10179 beta_elbo:     -15023 log_px:      -9924 log_qz:         -4 log_pz:       -259 kl:        255  93
-[2K[2Kloss:      15043 elbo:     -10137 beta_elbo:     -15043 log_px:      -9879 log_qz:         -4 log_pz:       -262 kl:        258  94
-[2K[2Kloss:      15482 elbo:     -10097 beta_elbo:     -15482 log_px:      -9814 log_qz:         -4 log_pz:       -287 kl:        283  95
-[2K[2Kloss:      16726 elbo:     -10098 beta_elbo:     -16726 log_px:      -9749 log_qz:         -4 log_pz:       -353 kl:        349  96
-[2K[2Kloss:      16109 elbo:     -10027 beta_elbo:     -16109 log_px:      -9707 log_qz:         -4 log_pz:       -324 kl:        320  97
-[2K[2Kloss:      15069 elbo:      -9971 beta_elbo:     -15069 log_px:      -9702 log_qz:         -4 log_pz:       -272 kl:        268  98
-[2K[2Kloss:      15140 elbo:      -9930 beta_elbo:     -15140 log_px:      -9656 log_qz:         -4 log_pz:       -278 kl:        274  99
-[2K[2Kloss:      15144 elbo:      -9882 beta_elbo:     -15144 log_px:      -9605 log_qz:         -4 log_pz:       -281 kl:        277 100
