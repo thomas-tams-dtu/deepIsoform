@@ -18,7 +18,7 @@ save_path = f'/zhome/99/d/155947/DeeplearningProject/deepIsoform/models/ipca_mod
 print(save_path)
 
 archs4_train = IsoDatasets.Archs4GeneExpressionDataset("/dtu-compute/datasets/iso_02456/hdf5/")
-archs4_train_dataloader = DataLoader(archs4_train, batch_size=1500, shuffle=True)
+archs4_train_dataloader = DataLoader(archs4_train, batch_size=5000, shuffle=True)
 
 ipca = IncrementalPCA(n_components=N_COMPONENTS)
 

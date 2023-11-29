@@ -1,11 +1,13 @@
 import os
 
-def write_training_data(file_path, network_name, network_size, latent_features, learning_rate, weight_decay, patience, training_runs, train_loss, eval_loss):
+def write_training_data(file_path, metadata_dict):
+    
     # Check if file exists
     print(os.path.exists(file_path))
     if not os.path.exists(file_path):
         with open(file_path, 'w') as file:
-            header_list = ['network_name', 'size', 'latent_features', 'learning_rate', 'weight_decay', 'patience', 'training_runs', 'train_loss', 'eval_loss']
+            header_list = metadata_dict.keys()
+
             header_string = '\t'.join(map(str, header_list)) + '\n'
             file.write(header_string)
     
@@ -14,8 +16,8 @@ def write_training_data(file_path, network_name, network_size, latent_features, 
         existing_content = file.read()
 
     # Add a line to the existing content
-    training_data_list = [network_name, network_size, latent_features, learning_rate, weight_decay, patience, training_runs, train_loss, eval_loss]
-    line_to_add = '\t'.join(map(str, training_data_list)) + '\n'
+    metadata_list = metadata_dict.values()
+    line_to_add = '\t'.join(map(str, metadata_list)) + '\n'
     new_content = existing_content + line_to_add
 
     # Write the new content back to the file

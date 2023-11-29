@@ -4,9 +4,14 @@ import numpy as np
 import torch.utils.data
 
 class Archs4GeneExpressionDataset(torch.utils.data.Dataset):
-    def __init__(self, data_dir:str, load_in_mem:bool=False):
-        f_archs4 = h5py.File(data_dir + '/archs4_gene_expression_norm_transposed.hdf5', mode='r')
+    def __init__(self, data_dir:str, validation_set:bool=False, load_in_mem:bool=False):
+        f_archs4 = h5py.File(data_dir + 'archs4_gene_expression_norm_transposed.hdf5', mode='r')
         self.dset = f_archs4['expressions']
+
+        if validation_set:
+            self.dset =self.dset[:16789]
+        else:
+            self.dset = self.dset[16789:]
 
         if load_in_mem:
             self.dset = np.array(self.dset)
@@ -41,8 +46,12 @@ class GtexDataset(torch.utils.data.Dataset):
             matches = [bool(re.search(include, s.decode(), re.IGNORECASE)) for s in f_gtex_gene['tissue']]
             self.idxs = np.where(matches)[0]
 
-        elif exclude:
+        elif isinstance(exclude, str):
             matches = [not(bool(re.search(exclude, s.decode(), re.IGNORECASE))) for s in f_gtex_gene['tissue']]
+            self.idxs = np.where(matches)[0]
+
+        elif isinstance(exclude, list):
+            matches = [not any(re.search(pattern, s.decode(), re.IGNORECASE) for pattern in exclude) for s in f_gtex_gene['tissue']]
             self.idxs = np.where(matches)[0]
 
     def __len__(self):
