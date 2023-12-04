@@ -53,13 +53,13 @@ print('NUM_EPOCHS     ', NUM_EPOCHS         )
 
 # CHANGE PROJECT_DIR TO LOCATION OF deepIsoform
 PROJECT_DIR =f'/zhome/99/d/155947/DeeplearningProject/deepIsoform'
-MODEL_NAME = f'ENCODER_DENSE_l{LATENT_FEATURES}_lr{LEARNING_RATE}_e{NUM_EPOCHS}_wd{WEIGHT_DECAY}_p{PATIENCE}'
+MODEL_NAME = f'ENCODER_DENSE_l{LATENT_FEATURES}_lr{LEARNING_RATE}_e{NUM_EPOCHS}_wd{WEIGHT_DECAY}_p{PATIENCE}_b{BETA}'
 METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/training_meta_data/encoder_dense_train_metadata_{NETWORK_SIZE}.tsv'
 PLOT_PATH = f'{PROJECT_DIR}/model_plots/encoder_dense_train/{MODEL_NAME}_loss_plot.png'
 MODEL_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/{MODEL_NAME}'
 
 ## Set manual for now
-ENCODER_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/VAE_e50_lf{LATENT_FEATURES}_b{BETA}_hl128_lr0.0001'
+ENCODER_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/VAE_e100_lf{LATENT_FEATURES}_b{BETA}_hl128_lr0.0001'
 print(ENCODER_PATH)
 
 
@@ -243,7 +243,7 @@ with torch.no_grad():
         # Caculate loss and backprop
         loss = criterion(x, y).double()
 
-        test_loss.append(loss)
+        test_loss.append(loss.item())
         
 
 
@@ -264,6 +264,7 @@ metadata_dictionary = {
                     'latent_features' :LATENT_FEATURES,
                     'learning_rate':LEARNING_RATE,
                     'weight_decay' :WEIGHT_DECAY,
+                    'beta': BETA,
                     'patience':PATIENCE,
                     'training_runs':epoch,
                     'training_time' :training_time,
@@ -300,3 +301,7 @@ if SAVE_MODEL:
     # Save the model and additional information
     torch.save({'model_state_dict': fnn.state_dict(), 'info': info},
                 MODEL_PATH)
+    
+
+# Plotting val and train data
+plot_loss(training_loss=training_loss, validation_loss=validation_loss, save_path=PLOT_PATH)
