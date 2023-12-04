@@ -3,13 +3,13 @@
 ### –- specify queue --
 #BSUB -q gpuv100
 ### -- set the job Name --
-#BSUB -J encD_test
+#BSUB -J EncD_xl
 ### -- ask for number of cores (default: 1) --
 #BSUB -n 4
 ### -- Select the resources: 1 gpu in exclusive process mode --
 #BSUB -gpu "num=1:mode=exclusive_process"
 ### -- set walltime limit: hh:mm --  maximum 24 hours for GPU-queues right now
-#BSUB -W 00:10
+#BSUB -W 23:50
 # request 5GB of system-memory
 #BSUB -R "rusage[mem=10GB]"
 #BSUB -R "select[gpu32gb]"
@@ -38,68 +38,106 @@ module load cuda/11.6
 source activate VAE-env2
 
 # Run command
-/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/PCA_dense_train.py -ns XXL -lf 32 -wd 1e-6 -bs 500 -lr 1e-4 -p 6 -e 100
+#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/PCA_dense_train.py -ns XL -lf 32 -wd 1e-6 -bs 500 -lr 1e-4 -p 6 -e 100
 
 
 #### TRAIN PCA MODEL
 #/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/PCA_train.py -nc 4044
 
 
-#### TRAIN PCA DENSE NETWORK
+
+#### DENSE NETWORK
 #net_size=small
 #net_size=medium
 #net_size=large
 #net_size=XL
-#net_size=XXL
+#
+#weight_decays=(1e-8 5e-8 1e-7 5e-7 1e-6 5e-6 1e-5 5e-5 1e-4 5e-4 1e-3)
+#learning_rates=(5e-2 1e-2 5e-3 1e-3 5e-4 1e-4 5e-5 1e-5 5e-6 1e-6 5e-7 1e-7 5e-8 1e-8)
+#
+### Loop over the values
+#for lr in "${learning_rates[@]}"; do
+#for wd in "${weight_decays[@]}"; do
+#
+#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/dense_train.py -ns ${net_size} -lf 69 -wd ${wd} -bs 500 -lr ${lr} -p 10 -e 100
+##/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/dense_train.py -ns small -lf 69 -wd 1e-7 -bs 500 -lr 5e-2 -p 10 -e 100
+#done
+#done
+#
+#echo end of run
+
+
+#### TRAIN PCA DENSE NETWORK
+##net_size=small
+##lr=0.005
+#
+##net_size=medium
+##lr=0.001
+#
+##net_size=large
+##lr=0.005
+#
+#net_size=XL
+#lr=0.001
 #
 #weight_decays=(1e-8 5e-8 1e-7 5e-7 1e-6 5e-6 1e-5 5e-5 1e-4 5e-4 1e-3)
 #latent_features=(16 32 64 128 256 512 1024 2048)
+##latent_features=(512 1024 2048)
 #
 ## Loop over the values
 #for lf in "${latent_features[@]}"; do
 #for wd in "${weight_decays[@]}"; do
 #
-#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/PCA_dense_train.py -ns ${net_size} -lf ${lf} -wd ${wd} -bs 500 -lr 1e-4 -p 6 -e 100
+#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/PCA_dense_train.py -ns ${net_size} -lf ${lf} -wd ${wd} -bs 500 -lr ${lr} -p 10 -e 100
 ##/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/PCA_dense_train.py -ns XXL -lf 32 -wd 1e-6 -bs 500 -lr 1e-4 -p 6 -e 100
 #done
 #done
 #
 #echo end of run
 
-### TRAIN VAE
+#### TRAIN VAE
 #beta_values=(0.01 0.05 0.1 0.5 1 5 10 50)
-#latent_features=(1024 512 256 128 64 32 16)
+##latent_features=(1024 512 256 128 64 32 16)
+#latent_features=(256 512)
 #
 ## Loop over the values
 #for lf in "${latent_features[@]}"; do
 #for beta in "${beta_values[@]}"; do
 #
-#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/VAE_train.py -lf ${lf} -b ${beta} -bs 500 -lr 1e-4 -hl 128 -e 50 -p 6 --sm
-##/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/VAE_train.py -lf 16 -b 5 -bs 250 -lr 1e-4 -hl 128 -e 100 -p 6
+#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/VAE_train.py -lf ${lf} -b ${beta} -bs 500 -lr 1e-4 -hl 128 -e 100 -p 100 --sm
+##/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/VAE_train.py -lf 16 -b 10 -bs 500 -lr 1e-4 -hl 128 -e 100 -p 100 --sm
 #done
 #done
 #
 #echo end of run
-
+#
 
 #### TRAIN ENCODER DENSE NETWORK
 #net_size=small
-#net_size=medium
-#net_size=large
-#net_size=XL
+#lr=0.005
 
-#weight_decays=(0.00000001 0.00000005 0.0000001 0.0000005 0.000001 0.000005 0.00001 0.00005 0.0001 0.0005 0.001)
-#latent_features=(16 32 64 128 256 512 1024 2048 4096 8192 16384)
-#
-## Loop over the values
-#for lf in "${latent_features[@]}"; do
-#for b in "$beta_values[@]"; do
-#
-#wd = 
-#
-#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/encoder_dense_train.py -ns ${net_size} -lf ${lf} -wd ${wd} -b ${b} -bs 500 -lr 1e-4 -p 6 -e 100
-#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/encoder_dense_train.py -ns small -lf 1024 -wd 5e-05 -b 0.05 -bs 500 -lr 1e-4 -p 6 -e 100
-#done
-#done
-#
-#echo end of run
+#net_size=medium
+#lr=0.001
+
+#net_size=large
+#lr=0.005
+
+net_size=XL
+lr=0.001
+
+#latent_features=(512)
+#beta_values=(1)
+latent_features=(1024 256 128 64 32 16)
+beta_values=(0.01 0.01 0.05 0.01 0.5 0.1)
+weight_decays=(5e-6 1e-5 5e-5 1e-4 5e-4 1e-3)
+
+for ((i=0; i<${#latent_features[@]}; i++)); do
+    lf=${latent_features[i]}
+    beta=${beta_values[i]}
+
+    for wd in "${weight_decays[@]}"; do
+        /zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/encoder_dense_train.py -ns ${net_size} -lf ${lf} -wd ${wd} -b ${beta} -bs 500 -lr ${lr} -p 10 -e 100
+    done
+done
+
+echo end of run
