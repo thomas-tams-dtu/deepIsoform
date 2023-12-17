@@ -3,7 +3,7 @@
 ### –- specify queue --
 #BSUB -q gpuv100
 ### -- set the job Name --
-#BSUB -J VAE128
+#BSUB -J VAE256
 ### -- ask for number of cores (default: 1) --
 #BSUB -n 4
 ### -- Select the resources: 1 gpu in exclusive process mode --
@@ -159,31 +159,31 @@ lr=0.005
 #net_size=XL
 #lr=0.001
 
-#latent_features=(512)
-#beta_values=(1)
-#lf=64
-#beta_values=(1 0.1 0.001 0.0001 1e-5 1e-6 0)
-#weight_decays=(1e-8 5e-8 1e-7 5e-7 1e-6 5e-6 1e-5 5e-5 1e-4 5e-4 1e-3 5e-3 5e-3)
-#
-#for wd in "${weight_decays[@]}"; do
-#for beta in "${beta_values[@]}"; do
-#
-#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/encoder_dense_train.py -ns ${net_size} -lf ${lf} -wd ${wd} -b ${beta} -bs 500 -lr ${lr} -p 10 -e 100
-#
-#done
-#done
-#
-#echo end of run
+latent_features=(512)
+beta_values=(1)
+lf=64
+beta_values=(1 0.1 0.001 0.0001 1e-5 1e-6 0)
+weight_decays=(1e-8 5e-8 1e-7 5e-7 1e-6 5e-6 1e-5 5e-5 1e-4 5e-4 1e-3 5e-3 5e-3)
+
+for wd in "${weight_decays[@]}"; do
+for beta in "${beta_values[@]}"; do
+
+/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/encoder_dense_train.py -ns ${net_size} -lf ${lf} -wd ${wd} -b ${beta} -bs 500 -lr ${lr} -p 10 -e 100
+
+done
+done
+
+echo end of run
 
 
 ##### TRAIN VAE AND LATENT REPRESENTATION
-beta_values=(1 0.1 0.001 0.0001 1e-5 1e-6 0)
-
-for beta in "${beta_values[@]}"; do
-
-/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/train_VAE.py -lf 128 -b ${beta} -bs 200 -lr 1e-4 -hl 128 -e 30 -p 10 --sm
-
-done
-
-##/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/encoder_dense_latent_rep.py -ns small -lf 16 -wd 5e-7 -b 0 -bs 500 -lr 0.005 -p 10 -e 100 --sm
+#beta_values=(1 0.1 0.001 0.0001 1e-5 1e-6 0)
+#
+#for beta in "${beta_values[@]}"; do
+#
+#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/train_VAE.py -lf 256 -b ${beta} -bs 200 -lr 1e-4 -hl 128 -e 30 -p 10 --sm
+#
+#done
+#
+###/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/encoder_dense_latent_rep.py -ns small -lf 16 -wd 5e-7 -b 0 -bs 500 -lr 0.005 -p 10 -e 100 --sm
 
