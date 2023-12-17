@@ -1,4 +1,5 @@
 data/
+logs/
+model_plots/
 models/
 
-tmp/DNN_train.py

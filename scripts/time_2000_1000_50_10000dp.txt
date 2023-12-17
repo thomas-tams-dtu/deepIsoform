@@ -1,5 +1,0 @@
-/zhome/99/d/155947/.lsbatch/1699032420.19147049.shell: line 33: small_VAE_test.py: command not found
-
-real	0m0.005s
-user	0m0.000s
-sys	0m0.001s
