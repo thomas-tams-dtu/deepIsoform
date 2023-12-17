@@ -91,7 +91,7 @@ with open(IPCA, 'rb') as file:
 
 ### INIT FNN
 # Grab a sample to initialize latent features and output size for network
-gene_expr, isoform_expr = next(iter(gtx_train_dataloader))
+gene_expr, isoform_expr, _ = next(iter(gtx_train_dataloader))
 
 # Select corresponding network
 if NETWORK_SIZE == 'small':
@@ -151,7 +151,7 @@ while epoch < NUM_EPOCHS:
     print('Training epoch', epoch)
     
     # Go through each batch in the training dataset using the loader
-    for x, y in tqdm(gtx_train_dataloader):
+    for x, y, _ in tqdm(gtx_train_dataloader):
         # Send to device and do PCA
         x = ipca.transform(x)
         x = torch.from_numpy(x).float()
@@ -176,7 +176,7 @@ while epoch < NUM_EPOCHS:
     with torch.no_grad():
         fnn.eval()
         # Grab test data
-        x, y = next(iter(gtx_val_dataloader))
+        x, y, _ = next(iter(gtx_val_dataloader))
 
         # Run PCA
         x = ipca.transform(x)
@@ -210,7 +210,7 @@ with torch.no_grad():
     fnn.eval()
 
     # Go through each batch in the training dataset using the loader
-    for x, y in tqdm(gtx_test_dataloader):
+    for x, y, _ in tqdm(gtx_test_dataloader):
         # Send to device and do PCA
         x = ipca.transform(x)
         x = torch.from_numpy(x).float()

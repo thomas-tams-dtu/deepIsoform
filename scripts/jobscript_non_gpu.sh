@@ -3,7 +3,7 @@
 ### -- specify queue -- 
 #BSUB -q hpc
 ### -- set the job Name -- 
-#BSUB -J gtex stratify
+#BSUB -J UMAP_archs4_trained
 ### -- ask for number of cores (default: 1) -- 
 #BSUB -n 1
 ### -- specify that the cores must be on the same host -- 
@@ -32,4 +32,4 @@ source activate VAE-env2
 
 #{ time /zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/small_VAE_test.py ; } 2> time_e50_d1000_100_l2000_1000_50.txt
 
-/zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/create_hdf5_gtex.py
+/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/latent_space_representation_UMAP.py

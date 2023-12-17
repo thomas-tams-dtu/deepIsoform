@@ -7,7 +7,7 @@ from tqdm import tqdm
 import numpy as np
 from typing import *
 from FFNN import FeedForwardIsoform_small, FeedForwardIsoform_medium, FeedForwardIsoform_large, FeedForwardIsoform_XL, FeedForwardIsoform_XXL
-from VAE import VAE_lf, VAE
+from VAE2 import VAE_lf
 from write_training_data import write_training_data
 from collections import defaultdict
 import pickle
@@ -54,12 +54,21 @@ print('NUM_EPOCHS     ', NUM_EPOCHS         )
 # CHANGE PROJECT_DIR TO LOCATION OF deepIsoform
 PROJECT_DIR =f'/zhome/99/d/155947/DeeplearningProject/deepIsoform'
 MODEL_NAME = f'ENCODER_DENSE_l{LATENT_FEATURES}_lr{LEARNING_RATE}_e{NUM_EPOCHS}_wd{WEIGHT_DECAY}_p{PATIENCE}_b{BETA}'
-METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/training_meta_data/encoder_dense_train_metadata_{NETWORK_SIZE}.tsv'
+#METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/training_meta_data/encoder_dense_train_metadata_{NETWORK_SIZE}.tsv'
 PLOT_PATH = f'{PROJECT_DIR}/model_plots/encoder_dense_train/{MODEL_NAME}_loss_plot.png'
 MODEL_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/{MODEL_NAME}'
 
 ## Set manual for now
-ENCODER_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/VAE_e100_lf{LATENT_FEATURES}_b{BETA}_hl128_lr0.0001'
+#ENCODER_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/VAE_e100_lf{LATENT_FEATURES}_b{BETA}_hl128_lr0.0001'
+
+if LATENT_FEATURES == 2:
+    ENCODER_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/my_VAE_e15_lf{LATENT_FEATURES}_b{BETA}_hl128_lr0.0001'
+else:
+    ENCODER_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/my_VAE_e30_lf{LATENT_FEATURES}_b{BETA}_hl128_lr0.0001'
+
+METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/bhole_storage/training_meta_data/custom_encoder_dense_train_metadata_{NETWORK_SIZE}.tsv'
+
+
 print(ENCODER_PATH)
 
 
@@ -69,7 +78,7 @@ if NETWORK_SIZE not in ['small', 'medium', 'large', 'XL', 'XXL']:
     sys.exit(1)
 
 # Check if latent features are proper
-if LATENT_FEATURES not in [16, 32, 64, 128, 256, 512, 1024, 2048, 4044]:
+if LATENT_FEATURES not in [2, 16, 32, 64, 128, 256, 512, 1024, 2048, 4044]:
     print(f'Number of latents features has to be 16, 32, 64, 128, 256, 512, 1024, 2048, 4044. Got \'{LATENT_FEATURES}\'')
     sys.exit(1)
 
@@ -95,7 +104,7 @@ gtx_test_dataloader = DataLoader(gtex_test, batch_size=10, shuffle=True)
 
 ### INIT ENCODER MODEL
 # Grab a sample to initialize latent features and output size for network
-gene_expr, isoform_expr = next(iter(gtx_train_dataloader))
+gene_expr, isoform_expr, _ = next(iter(gtx_train_dataloader))
 
 # Encoder model
 encoder_model = VAE_lf(input_shape=gene_expr[0].size(),
@@ -154,6 +163,8 @@ validation_loss = []
 training_time = []
 best_val_loss = float('inf')
 epoch = 0
+early_stopping_counter = 0
+
 while epoch < NUM_EPOCHS:
     fnn.train()
     epoch+= 1
@@ -162,7 +173,7 @@ while epoch < NUM_EPOCHS:
     print('Training epoch', epoch)
     
     # Go through each batch in the training dataset using the loader
-    for x, y in tqdm(gtx_train_dataloader):
+    for x, y, _ in tqdm(gtx_train_dataloader):
         # Send to device
         #x = x.float()
         x = x.to(device)
@@ -190,7 +201,7 @@ while epoch < NUM_EPOCHS:
     with torch.no_grad():
         fnn.eval()
         # Grab test data
-        x, y = next(iter(gtx_val_dataloader))
+        x, y, _ = next(iter(gtx_val_dataloader))
 
         # Send to device
         #x = x.float()
@@ -227,7 +238,7 @@ with torch.no_grad():
     fnn.eval()
 
     # Go through each batch in the training dataset using the loader
-    for x, y in tqdm(gtx_test_dataloader):
+    for x, y, _ in tqdm(gtx_test_dataloader):
         # Send to device
         #x = x.float()
         x = x.to(device)
