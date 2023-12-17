@@ -7,4 +7,4 @@ rm -rf ~/miniconda3/miniconda.sh
 ~/miniconda3/bin/conda init zsh
 
 # Install the conda environment VAE-env2 via VAE-env2.yml with command
-conda env create --name VAE-env2 --file VAE-env2
+conda env create --name VAE-env2 --file VAE-env2.yml
