@@ -3,8 +3,10 @@
 import umap
 import IsoDatasets as IsoDatasets
 from torch.utils.data import DataLoader
-from tqdm import tqdm
-import matplotlib.pyplot as plt
+import tqdm
+
+## WARNING
+# This script require around 80GB RAM, since we are loading the entirety of the datasets to train UMAP
 
 PROJECT_DIR =f'/zhome/99/d/155947/DeeplearningProject/deepIsoform'
 METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/bhole_storage/training_meta_data/UMAP_embed_archs4_trained_2.tsv'
@@ -22,7 +24,7 @@ reducer = umap.UMAP()
 archs4_dataloader = DataLoader(archs4_dataset_train, batch_size=151095, shuffle=True)
 
 embbing_data_file = open(METADATA_SAVE_PATH, 'w')
-for x in archs4_dataloader:
+for x in tqdm(archs4_dataloader):
     archs4_embed = reducer.fit_transform(x)
 
     emb1 = archs4_embed[:, 0].tolist()
@@ -30,12 +32,13 @@ for x in archs4_dataloader:
 
     combined_data = list(zip(emb1, emb2))
     for z1, z2, lab in combined_data:
-        embbing_data_file.write(f'{z1},{z2}\n')   
+        embbing_data_file.write(f'{z1}\t{z2}\n')   
 
 # Run the embedding of gtex
 gtex_dataloader = DataLoader(gtex_all, batch_size=17356, shuffle=True)
 embbing_data_file = open(METADATA_SAVE_PATH, 'w')
-for x, _, tissues in gtex_dataloader:
+
+for x, _, tissues in tqdm(gtex_dataloader):
     gtex_embed = reducer.transform(x)
     tissue_list = [tissue.decode('utf-8') for tissue in tissues]
 
@@ -44,7 +47,7 @@ for x, _, tissues in gtex_dataloader:
 
     combined_data = list(zip(emb1, emb2, tissue_list))
     for z1, z2, lab in combined_data:
-        embbing_data_file.write(f'{z1},{z2},{lab}\n')
+        embbing_data_file.write(f'{z1}\t{z2}\t{lab}\n')
     break
 
 print('done')

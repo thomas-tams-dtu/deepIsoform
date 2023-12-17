@@ -8,8 +8,6 @@ import numpy as np
 from typing import *
 from FFNN import FeedForwardIsoform_small, FeedForwardIsoform_medium, FeedForwardIsoform_large, FeedForwardIsoform_XL, FeedForwardIsoform_XXL
 from write_training_data import write_training_data
-from collections import defaultdict
-import pickle
 from plot_loss import plot_loss
 import argparse
 import sys

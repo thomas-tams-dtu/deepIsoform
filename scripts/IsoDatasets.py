@@ -11,7 +11,7 @@ class Archs4GeneExpressionDataset(torch.utils.data.Dataset):
         self.col_names = f_archs4['col_names']
         
         if validation_set:
-            self.dset =self.dset[:16789]
+            self.dset = self.dset[:16789]
         else:
             self.dset = self.dset[16789:]
 

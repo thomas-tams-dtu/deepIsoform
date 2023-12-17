@@ -144,8 +144,6 @@ source activate VAE-env2
 #done
 #
 #echo end of run
-#
-#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/encoder_dense_train.py -ns small -lf 2 -wd 5e-7 -b 0 -bs 500 -lr 0.005 -p 10 -e 100
 
 
 ##### TRAIN CUSTOM ENCODER DENSE

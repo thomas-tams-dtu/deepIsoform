@@ -5,8 +5,6 @@ import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-
-
 # Example of making a training set that excludes samples from the brain and a test set with only samples from the brain
 # If you have enough memory, you can load the dataset to memory using the argument load_in_mem=True
 gtex_train = IsoDatasets.GtexDataset("/dtu-compute/datasets/iso_02456/hdf5/", exclude='brain')
