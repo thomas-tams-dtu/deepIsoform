@@ -6,8 +6,7 @@ from tqdm import tqdm
 import pickle
 import argparse
 
-'pca_output.tsv'
-parser = argparse.ArgumentParser(description='Print latent feature representation of the Gtex data, produced by a given PCA model')
+parser = argparse.ArgumentParser(description='Writes latent feature representation of the Gtex data, produced by a given PCA model')
 parser.add_argument('-pcap', type=str, help='Path to trained pca model')
 parser.add_argument('-o', type=str, help='Embedded features output file path')
 args = parser.parse_args()

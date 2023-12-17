@@ -16,7 +16,7 @@ import sys
 import time
 
 # Arguments
-parser = argparse.ArgumentParser(description='Training dense neural network')
+parser = argparse.ArgumentParser(description='Training of PCA empowered dense neural network (PCADNN) for predicting isoform expressions')
 parser.add_argument('-ns', type=str, help='Network size. Choose between small, medium, large')
 parser.add_argument('-e', type=int, help='Number of epochs to train')
 parser.add_argument('-lf', type=int, help='Latents features used for encoding. Choose between 16, 32, 64, 128, 256, 512, 1024')
