@@ -13,7 +13,7 @@ from write_training_data import write_training_data
 import argparse
 import time
 
-parser = argparse.ArgumentParser(description='Training dense neural network')
+parser = argparse.ArgumentParser(description='Training of VAE on the Archs4 dataset')
 parser.add_argument('-e', type=int, help='Number of epochs to train')
 parser.add_argument('-hl', type=int, help='Hidden layers size')
 parser.add_argument('-lf', type=int, help='Latents features used for encoding. Choose between 16, 32, 64, 128, 256, 512, 1024')
