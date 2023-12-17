@@ -7,7 +7,6 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 import IsoDatasets as IsoDatasets
-from plot_loss import plot_loss
 from VAE2 import VAE_lf, loss_function
 from write_training_data import write_training_data
 import argparse
@@ -48,7 +47,6 @@ PROJECT_DIR = f'/zhome/99/d/155947/DeeplearningProject/deepIsoform'
 MODEL_NAME = f'my_VAE_e{NUM_EPOCHS}_lf{LATENT_FEATURES}_b{BETA}_hl{HIDDEN_SIZE}_lr{LEARNING_RATE}'
 MODEL_SAVE_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/{MODEL_NAME}'
 METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/bhole_storage/training_meta_data/my_VAE_train_metadata.tsv'
-PLOT_PATH = f"{PROJECT_DIR}/model_plots/vae_train/{MODEL_NAME}.png"
 
 # Set up dataset and dataloader for archs4 data
 archs4_dataset_train = IsoDatasets.Archs4GeneExpressionDataset('/dtu-compute/datasets/iso_02456/hdf5-row-sorted/')
@@ -184,6 +182,3 @@ if SAVE_MODEL:
     torch.save({'model_state_dict': vae.state_dict(),
                 'training_metadata': metadata_dictionary},
                 MODEL_SAVE_PATH)
-
-# Plot training loss
-plot_loss(training_loss=training_loss[-5:], validation_loss=validation_loss[-5:], save_path=PLOT_PATH)
