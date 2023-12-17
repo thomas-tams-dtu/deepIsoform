@@ -117,3 +117,7 @@ for x, _, tissues in tqdm(gtx_test_dataloader):
 
 latent_file.close()
 
+
+
+# EXAMPLE RUN
+# latent_space_representation_encDNN.py -bs 100 -mp /zhome/99/d/155947/DeeplearningProject/deepIsoform/data/bhole_storage/models/my_VAE_e30_lf2_b0.0_hl128_lr0.0001 -o /zhome/99/d/155947/DeeplearningProject/deepIsoform/data/bhole_storage/training_meta_data/latent_space_points/latent_space_representation_encoder.tsv
