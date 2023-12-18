@@ -59,7 +59,7 @@ MODEL_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/{MODEL_NAME}'
 
 ENCODER_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/my_VAE_e30_lf{LATENT_FEATURES}_b{BETA}_hl128_lr0.0001'
 
-METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/bhole_storage/training_meta_data/custom_encoder_dense_train_metadata_{NETWORK_SIZE}.tsv'
+METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/bhole_storage/training_meta_data/custom_encoder_dense_train_metadata_lf{LATENT_FEATURES}_{NETWORK_SIZE}.tsv'
 
 
 print(ENCODER_PATH)
