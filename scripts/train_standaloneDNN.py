@@ -46,7 +46,7 @@ print('NUM_EPOCHS     ', NUM_EPOCHS         )
 
 # CHANGE PROJECT_DIR TO LOCATION OF deepIsoform
 PROJECT_DIR =f'/zhome/99/d/155947/DeeplearningProject/deepIsoform'
-MODEL_NAME = f'DENSE_l{LATENT_FEATURES}_lr{LEARNING_RATE}_e{NUM_EPOCHS}_wd{WEIGHT_DECAY}_p{PATIENCE}'
+MODEL_NAME = f'STANDALONE_DENSE_l{LATENT_FEATURES}_lr{LEARNING_RATE}_e{NUM_EPOCHS}_wd{WEIGHT_DECAY}_p{PATIENCE}'
 METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/training_meta_data/dense_train_metadata_{NETWORK_SIZE}.tsv'
 MODEL_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/{MODEL_NAME}'
 
@@ -134,7 +134,7 @@ while epoch < NUM_EPOCHS:
     print('Training epoch', epoch)
     
     # Go through each batch in the training dataset using the loader
-    for x, y in tqdm(gtx_train_dataloader):
+    for x, y, _ in tqdm(gtx_train_dataloader):
         x = x.to(device)
         y = y.to(device)
 
@@ -156,7 +156,7 @@ while epoch < NUM_EPOCHS:
     with torch.no_grad():
         fnn.eval()
         # Grab test data
-        x, y = next(iter(gtx_val_dataloader))
+        x, y, _ = next(iter(gtx_val_dataloader))
 
         # Run PCA
         x = x.to(device)
@@ -188,7 +188,7 @@ with torch.no_grad():
     fnn.eval()
 
     # Go through each batch in the training dataset using the loader
-    for x, y in tqdm(gtx_test_dataloader):
+    for x, y, _ in tqdm(gtx_test_dataloader):
         # Send to device and do PCA
         x = x.to(device)
         y = y.to(device)

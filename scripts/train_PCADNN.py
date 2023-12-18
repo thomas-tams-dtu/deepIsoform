@@ -50,7 +50,7 @@ print('NUM_EPOCHS     ', NUM_EPOCHS         )
 PROJECT_DIR =f'/zhome/99/d/155947/DeeplearningProject/deepIsoform'
 MODEL_NAME = f'PCA_DENSE_l{LATENT_FEATURES}_lr{LEARNING_RATE}_e{NUM_EPOCHS}_wd{WEIGHT_DECAY}_p{PATIENCE}'
 IPCA = f'/zhome/99/d/155947/DeeplearningProject/deepIsoform/models/ipca_model_n{LATENT_FEATURES}.pkl'
-METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/training_meta_data/pca_dense_train_metadata_{NETWORK_SIZE}.tsv'
+METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/bhole_storage/training_meta_data/custom_pca_dense_train_metadata_{NETWORK_SIZE}.tsv'
 MODEL_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/{MODEL_NAME}'
 
 # Check if size is proper
