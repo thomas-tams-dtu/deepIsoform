@@ -3,7 +3,7 @@
 ### –- specify queue --
 #BSUB -q gpuv100
 ### -- set the job Name --
-#BSUB -J VAE256
+#BSUB -J EncD_s2
 ### -- ask for number of cores (default: 1) --
 #BSUB -n 4
 ### -- Select the resources: 1 gpu in exclusive process mode --
@@ -147,8 +147,8 @@ source activate VAE-env2
 
 
 ##### TRAIN CUSTOM ENCODER DENSE
-net_size=small
-lr=0.005
+#net_size=small
+#lr=0.005
 
 #net_size=medium
 #lr=0.001
@@ -159,16 +159,16 @@ lr=0.005
 #net_size=XL
 #lr=0.001
 
-latent_features=(512)
-beta_values=(1)
-lf=64
+lf=2
 beta_values=(1 0.1 0.001 0.0001 1e-5 1e-6 0)
+beta_values=(1)
 weight_decays=(1e-8 5e-8 1e-7 5e-7 1e-6 5e-6 1e-5 5e-5 1e-4 5e-4 1e-3 5e-3 5e-3)
 
 for wd in "${weight_decays[@]}"; do
 for beta in "${beta_values[@]}"; do
 
-/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/encoder_dense_train.py -ns ${net_size} -lf ${lf} -wd ${wd} -b ${beta} -bs 500 -lr ${lr} -p 10 -e 100
+#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/train_encDNN.py -ns ${net_size} -lf ${lf} -wd ${wd} -b ${beta} -bs 500 -lr ${lr} -p 9 -e 100
+/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/train_encDNN.py -ns ${net_size} -lf ${lf} -wd ${wd} -b ${beta} -bs 500 -lr ${lr} -p 9 -e 100 --sm
 
 done
 done
