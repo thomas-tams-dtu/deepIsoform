@@ -10,7 +10,6 @@ from FFNN import FeedForwardIsoform_small, FeedForwardIsoform_medium, FeedForwar
 from write_training_data import write_training_data
 from collections import defaultdict
 import pickle
-from plot_loss import plot_loss
 import argparse
 import sys
 import time
@@ -52,7 +51,6 @@ PROJECT_DIR =f'/zhome/99/d/155947/DeeplearningProject/deepIsoform'
 MODEL_NAME = f'PCA_DENSE_l{LATENT_FEATURES}_lr{LEARNING_RATE}_e{NUM_EPOCHS}_wd{WEIGHT_DECAY}_p{PATIENCE}'
 IPCA = f'/zhome/99/d/155947/DeeplearningProject/deepIsoform/models/ipca_model_n{LATENT_FEATURES}.pkl'
 METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/training_meta_data/pca_dense_train_metadata_{NETWORK_SIZE}.tsv'
-PLOT_PATH = f'{PROJECT_DIR}/model_plots/pca_dense_train/{MODEL_NAME}_loss_plot.png'
 MODEL_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/{MODEL_NAME}'
 
 # Check if size is proper
@@ -277,7 +275,3 @@ if SAVE_MODEL:
     # Save the model and additional information
     torch.save({'model_state_dict': fnn.state_dict(), 'info': info},
                 MODEL_PATH)
-    
-
-# Plotting val and train data
-plot_loss(training_loss=training_loss, validation_loss=validation_loss, save_path=PLOT_PATH)

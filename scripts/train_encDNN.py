@@ -9,7 +9,6 @@ from typing import *
 from FFNN import FeedForwardIsoform_small, FeedForwardIsoform_medium, FeedForwardIsoform_large, FeedForwardIsoform_XL, FeedForwardIsoform_XXL
 from VAE2 import VAE_lf
 from write_training_data import write_training_data
-from plot_loss import plot_loss
 import argparse
 import sys
 import time
@@ -53,18 +52,14 @@ print('NUM_EPOCHS     ', NUM_EPOCHS         )
 PROJECT_DIR =f'/zhome/99/d/155947/DeeplearningProject/deepIsoform'
 MODEL_NAME = f'ENCODER_DENSE_l{LATENT_FEATURES}_lr{LEARNING_RATE}_e{NUM_EPOCHS}_wd{WEIGHT_DECAY}_p{PATIENCE}_b{BETA}'
 #METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/training_meta_data/encoder_dense_train_metadata_{NETWORK_SIZE}.tsv'
-PLOT_PATH = f'{PROJECT_DIR}/model_plots/encoder_dense_train/{MODEL_NAME}_loss_plot.png'
 MODEL_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/{MODEL_NAME}'
 
 ## Set manual for now
 #ENCODER_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/VAE_e100_lf{LATENT_FEATURES}_b{BETA}_hl128_lr0.0001'
 
-if LATENT_FEATURES == 2:
-    ENCODER_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/my_VAE_e15_lf{LATENT_FEATURES}_b{BETA}_hl128_lr0.0001'
-else:
-    ENCODER_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/my_VAE_e30_lf{LATENT_FEATURES}_b{BETA}_hl128_lr0.0001'
+ENCODER_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/my_VAE_e30_lf{LATENT_FEATURES}_b{BETA}_hl128_lr0.0001'
 
-METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/bhole_storage/training_meta_data/custom_encoder_dense_train_metadata_{NETWORK_SIZE}.tsv'
+METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/bhole_storage/training_meta_data/custom_encoder_dense_train_metadata_lf{LATENT_FEATURES}_{NETWORK_SIZE}.tsv'
 
 
 print(ENCODER_PATH)
@@ -311,6 +306,3 @@ if SAVE_MODEL:
     torch.save({'model_state_dict': fnn.state_dict(), 'info': info},
                 MODEL_PATH)
     
-
-# Plotting val and train data
-plot_loss(training_loss=training_loss, validation_loss=validation_loss, save_path=PLOT_PATH)
