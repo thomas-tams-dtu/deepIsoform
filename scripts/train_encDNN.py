@@ -9,6 +9,7 @@ from typing import *
 from FFNN import FeedForwardIsoform_small, FeedForwardIsoform_medium, FeedForwardIsoform_large, FeedForwardIsoform_XL, FeedForwardIsoform_XXL
 from VAE2 import VAE_lf
 from write_training_data import write_training_data
+from check_test_loss import check_better_test_loss
 import argparse
 import sys
 import time
@@ -52,7 +53,7 @@ print('NUM_EPOCHS     ', NUM_EPOCHS         )
 PROJECT_DIR =f'/zhome/99/d/155947/DeeplearningProject/deepIsoform'
 MODEL_NAME = f'ENCODER_DENSE_l{LATENT_FEATURES}_lr{LEARNING_RATE}_e{NUM_EPOCHS}_wd{WEIGHT_DECAY}_p{PATIENCE}_b{BETA}'
 #METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/training_meta_data/encoder_dense_train_metadata_{NETWORK_SIZE}.tsv'
-MODEL_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/{MODEL_NAME}'
+MODEL_DIR= f'{PROJECT_DIR}/data/bhole_storage/models'
 
 ## Set manual for now
 #ENCODER_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/VAE_e100_lf{LATENT_FEATURES}_b{BETA}_hl128_lr0.0001'
@@ -249,8 +250,9 @@ with torch.no_grad():
 
         test_loss.append(loss.item())
         
-
-
+avg_test_loss = np.mean(test_loss)
+MODEL_NAME += f"_tl{avg_test_loss}"
+MODEL_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/{MODEL_NAME}'
 
 ### PLOTTING, SAVING METADATA FROM TRAINING AND MODEL
 # Count parameters in model
@@ -282,27 +284,31 @@ write_training_data(file_path=METADATA_SAVE_PATH, metadata_dict=metadata_diction
 
 # Saving model
 if SAVE_MODEL:
-    init_values = {'batch_size': BATCH_SIZE,
-                   'num_epochs': NUM_EPOCHS}
+    better_than_previous_models = check_better_test_loss(model_test_loss = avg_test_loss,
+                                                         model_prefix = 'PCA_DENSE',
+                                                         model_dir = MODEL_DIR)
+    if better_than_previous_models:
+        print(f"Saving {MODEL_NAME} as best model")
+        init_values = {'batch_size': BATCH_SIZE,
+                       'num_epochs': NUM_EPOCHS}
 
-    layer_sizes = [(layer.in_features, layer.out_features) for layer in fnn.fnn if isinstance(layer, torch.nn.Linear)]
+        layer_sizes = [(layer.in_features, layer.out_features) for layer in fnn.fnn if isinstance(layer, torch.nn.Linear)]
 
-    # Create a dictionary to save additional information (optional)
-    info = {
-        'architecture': MODEL_NAME ,
-        'init_values': init_values,
-        'hyperparameters': {
-            'learning_rate': LEARNING_RATE,
-            'weight_decay': WEIGHT_DECAY,
-            'layer_size': layer_sizes
-        },
-        'patience': PATIENCE,
-        'num_epochs': epoch,
-        'train_loss': training_loss,
-        'validation_loss': validation_loss
-    }
+        # Create a dictionary to save additional information (optional)
+        info = {
+            'architecture': MODEL_NAME ,
+            'init_values': init_values,
+            'hyperparameters': {
+                'learning_rate': LEARNING_RATE,
+                'weight_decay': WEIGHT_DECAY,
+                'layer_size': layer_sizes
+            },
+            'patience': PATIENCE,
+            'num_epochs': epoch,
+            'train_loss': training_loss,
+            'validation_loss': validation_loss
+        }
 
-    # Save the model and additional information
-    torch.save({'model_state_dict': fnn.state_dict(), 'info': info},
-                MODEL_PATH)
-    
+        # Save the model and additional information
+        torch.save({'model_state_dict': fnn.state_dict(), 'info': info},
+                    MODEL_PATH)

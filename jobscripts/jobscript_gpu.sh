@@ -51,8 +51,8 @@ source activate VAE-env2
 #for lr in "${learning_rates[@]}"; do
 #for wd in "${weight_decays[@]}"; do
 #
-#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/dense_train.py -ns ${net_size} -lf 32 -wd ${wd} -bs 500 -lr ${lr} -p 10 -e 100
-/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/dense_train.py -ns XL -lf 32 -wd 5e-7 -bs 500 -lr 1e-3 -p 10 -e 100 --sm
+#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/dense_train.py -ns ${net_size} -wd ${wd} -bs 500 -lr ${lr} -p 10 -e 100
+/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/train_standaloneDNN.py -ns XL -wd 5e-7 -bs 500 -lr 1e-3 -p 10 -e 100 --sm
 #done
 #done
 #
@@ -82,7 +82,7 @@ source activate VAE-env2
 #for wd in "${weight_decays[@]}"; do
 #
 #/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/PCA_dense_train.py -ns ${net_size} -lf ${lf} -wd ${wd} -bs 500 -lr ${lr} -p 10 -e 100
-/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/train_PCADNN.py -ns XL -lf 1024 -wd 1e-8 -bs 500 -lr 1e-4 -p 10 -e 100 --sm
+/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/train_PCADNN.py -ns XL -lf 1024 -wd 5e-8 -bs 500 -lr 1e-4 -p 10 -e 100 --sm
 #done
 #done
 #
@@ -139,8 +139,8 @@ source activate VAE-env2
 
 
 ##### TRAIN CUSTOM ENCODER DENSE
-net_size=small
-lr=0.005
+#net_size=small
+#lr=0.005
 
 #net_size=medium
 #lr=0.001

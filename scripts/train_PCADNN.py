@@ -8,7 +8,7 @@ import numpy as np
 from typing import *
 from FFNN import FeedForwardIsoform_small, FeedForwardIsoform_medium, FeedForwardIsoform_large, FeedForwardIsoform_XL, FeedForwardIsoform_XXL
 from write_training_data import write_training_data
-from collections import defaultdict
+from check_test_loss import check_better_test_loss
 import pickle
 import argparse
 import sys
@@ -51,6 +51,7 @@ PROJECT_DIR =f'/zhome/99/d/155947/DeeplearningProject/deepIsoform'
 MODEL_NAME = f'PCA_DENSE_l{LATENT_FEATURES}_lr{LEARNING_RATE}_e{NUM_EPOCHS}_wd{WEIGHT_DECAY}_p{PATIENCE}'
 IPCA = f'/zhome/99/d/155947/DeeplearningProject/deepIsoform/models/ipca_model_n{LATENT_FEATURES}.pkl'
 METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/bhole_storage/training_meta_data/custom_pca_dense_train_metadata_{NETWORK_SIZE}.tsv'
+MODEL_DIR= f'{PROJECT_DIR}/data/bhole_storage/models'
 MODEL_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/{MODEL_NAME}'
 
 # Check if size is proper
@@ -222,7 +223,9 @@ with torch.no_grad():
 
         test_loss.append(loss.item())
         
-
+avg_test_loss = np.mean(test_loss)
+MODEL_NAME += f"_tl{avg_test_loss}"
+MODEL_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/{MODEL_NAME}'
 
 ### PLOTTING, SAVING METADATA FROM TRAINING AND MODEL
 # Count parameters in model
@@ -252,26 +255,31 @@ write_training_data(file_path=METADATA_SAVE_PATH, metadata_dict=metadata_diction
 
 # Saving model
 if SAVE_MODEL:
-    init_values = {'batch_size': BATCH_SIZE,
-                   'num_epochs': NUM_EPOCHS}
+    better_than_previous_models = check_better_test_loss(model_test_loss = avg_test_loss,
+                                                         model_prefix = 'ENCODER_DENSE',
+                                                         model_dir = MODEL_DIR)
+    if better_than_previous_models:
+        print(f"Saving {MODEL_NAME} as best model")
+        init_values = {'batch_size': BATCH_SIZE,
+                       'num_epochs': NUM_EPOCHS}
 
-    layer_sizes = [(layer.in_features, layer.out_features) for layer in fnn.FNN if isinstance(layer, torch.nn.Linear)]
+        layer_sizes = [(layer.in_features, layer.out_features) for layer in fnn.FNN if isinstance(layer, torch.nn.Linear)]
 
-    # Create a dictionary to save additional information (optional)
-    info = {
-        'architecture': MODEL_NAME ,
-        'init_values': init_values,
-        'hyperparameters': {
-            'learning_rate': LEARNING_RATE,
-            'weight_decay': WEIGHT_DECAY,
-            'layer_size': layer_sizes
-        },
-        'patience': PATIENCE,
-        'num_epochs': epoch,
-        'train_loss': training_loss,
-        'validation_loss': validation_loss
-    }
+        # Create a dictionary to save additional information (optional)
+        info = {
+            'architecture': MODEL_NAME ,
+            'init_values': init_values,
+            'hyperparameters': {
+                'learning_rate': LEARNING_RATE,
+                'weight_decay': WEIGHT_DECAY,
+                'layer_size': layer_sizes
+            },
+            'patience': PATIENCE,
+            'num_epochs': epoch,
+            'train_loss': training_loss,
+            'validation_loss': validation_loss
+        }
 
-    # Save the model and additional information
-    torch.save({'model_state_dict': fnn.state_dict(), 'info': info},
-                MODEL_PATH)
+        # Save the model and additional information
+        torch.save({'model_state_dict': fnn.state_dict(), 'info': info},
+                    MODEL_PATH)

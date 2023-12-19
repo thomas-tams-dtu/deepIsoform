@@ -8,6 +8,7 @@ import numpy as np
 from typing import *
 from FFNN import FeedForwardIsoform_small, FeedForwardIsoform_medium, FeedForwardIsoform_large, FeedForwardIsoform_XL, FeedForwardIsoform_XXL
 from write_training_data import write_training_data
+from check_test_loss import check_better_test_loss
 import argparse
 import sys
 import time
@@ -16,7 +17,6 @@ import time
 parser = argparse.ArgumentParser(description='Training dense neural network (DNN) to predict isoforms expression.\nTrained only on Gtex')
 parser.add_argument('-ns', type=str, help='Network size. Choose between small, medium, large')
 parser.add_argument('-e', type=int, help='Number of epochs to train')
-parser.add_argument('-lf', type=int, help='Latents features used for encoding. Choose between 16, 32, 64, 128, 256, 512, 1024')
 parser.add_argument('-wd', type=float, help='Weight decay used for Adam optimizer')
 parser.add_argument('-bs', type=int, help='Batch size for dataloader')
 parser.add_argument('-lr', type=float, help='Learning rate used for Adam optimizer')
@@ -28,7 +28,6 @@ args = parser.parse_args()
 # Initialize training parameters
 NETWORK_SIZE = args.ns
 SAVE_MODEL = args.sm
-LATENT_FEATURES = args.lf
 BATCH_SIZE = args.bs        # 500
 LEARNING_RATE = args.lr     # 1e-4
 WEIGHT_DECAY = args.wd      # 1e-5
@@ -37,7 +36,6 @@ NUM_EPOCHS = args.e         # 100
 
 print('NETWORK_SIZE   ', NETWORK_SIZE       )
 print('SAVE_MODEL     ', SAVE_MODEL         )
-print('LATENT_FEATURES', LATENT_FEATURES    )
 print('BATCH_SIZE     ', BATCH_SIZE         )  # 500
 print('LEARNING_RATE  ', LEARNING_RATE      )  # 1e-4
 print('WEIGHT_DECAY   ', WEIGHT_DECAY       )  # 1e-5
@@ -46,8 +44,9 @@ print('NUM_EPOCHS     ', NUM_EPOCHS         )
 
 # CHANGE PROJECT_DIR TO LOCATION OF deepIsoform
 PROJECT_DIR =f'/zhome/99/d/155947/DeeplearningProject/deepIsoform'
-MODEL_NAME = f'STANDALONE_DENSE_l{LATENT_FEATURES}_lr{LEARNING_RATE}_e{NUM_EPOCHS}_wd{WEIGHT_DECAY}_p{PATIENCE}'
-METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/training_meta_data/dense_train_metadata_{NETWORK_SIZE}.tsv'
+MODEL_NAME = f'STANDALONE_DENSE_lr{LEARNING_RATE}_e{NUM_EPOCHS}_wd{WEIGHT_DECAY}_p{PATIENCE}_{NETWORK_SIZE}'
+METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/bhole_storage/training_meta_data/dense_train_metadata_{NETWORK_SIZE}.tsv'
+MODEL_DIR= f'{PROJECT_DIR}/data/bhole_storage/models'
 MODEL_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/{MODEL_NAME}'
 
 # Check if size is proper
@@ -64,6 +63,7 @@ gtex_train = IsoDatasets.GtexDataset("/dtu-compute/datasets/iso_02456/hdf5-row-s
 gtex_val = IsoDatasets.GtexDataset("/dtu-compute/datasets/iso_02456/hdf5-row-sorted/", include='brain')
 gtex_test = IsoDatasets.GtexDataset("/dtu-compute/datasets/iso_02456/hdf5-row-sorted/", include='Artery')
 
+
 print("gtex training set size:", len(gtex_train))
 print("gtex validation set size:", len(gtex_val))
 print("gtex test set size:", len(gtex_test))
@@ -74,7 +74,7 @@ gtx_test_dataloader = DataLoader(gtex_test, batch_size=10, shuffle=True)
 
 ### INIT FNN
 # Grab a sample to initialize latent features and output size for network
-gene_expr, isoform_expr = next(iter(gtx_train_dataloader))
+gene_expr, isoform_expr, _ = next(iter(gtx_train_dataloader))
 
 # Select corresponding network
 if NETWORK_SIZE == 'small':
@@ -200,7 +200,9 @@ with torch.no_grad():
 
         test_loss.append(loss.item())
         
-
+avg_test_loss = np.mean(test_loss)
+MODEL_NAME += f"_tl{avg_test_loss}"
+MODEL_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/{MODEL_NAME}'
 
 ### PLOTTING, SAVING METADATA FROM TRAINING AND MODEL
 # Count parameters in model
@@ -215,7 +217,6 @@ metadata_dictionary = {
                     'network_size' :NETWORK_SIZE,
                     'num_params': num_params,
                     'batch_size' :BATCH_SIZE,
-                    'latent_features' :LATENT_FEATURES,
                     'learning_rate':LEARNING_RATE,
                     'weight_decay' :WEIGHT_DECAY,
                     'patience':PATIENCE,
@@ -230,26 +231,31 @@ write_training_data(file_path=METADATA_SAVE_PATH, metadata_dict=metadata_diction
 
 # Saving model
 if SAVE_MODEL:
-    init_values = {'batch_size': BATCH_SIZE,
-                   'num_epochs': NUM_EPOCHS}
+    better_than_previous_models = check_better_test_loss(model_test_loss = avg_test_loss,
+                                                         model_prefix = 'STANDALONE_DENSE',
+                                                         model_dir = MODEL_DIR)
+    if better_than_previous_models:
+        print(f"Saving {MODEL_NAME} as best model")
+        init_values = {'batch_size': BATCH_SIZE,
+                       'num_epochs': NUM_EPOCHS}
 
-    layer_sizes = [(layer.in_features, layer.out_features) for layer in fnn.FNN if isinstance(layer, torch.nn.Linear)]
+        layer_sizes = [(layer.in_features, layer.out_features) for layer in fnn.FNN if isinstance(layer, torch.nn.Linear)]
 
-    # Create a dictionary to save additional information (optional)
-    info = {
-        'architecture': MODEL_NAME ,
-        'init_values': init_values,
-        'hyperparameters': {
-            'learning_rate': LEARNING_RATE,
-            'weight_decay': WEIGHT_DECAY,
-            'layer_size': layer_sizes
-        },
-        'patience': PATIENCE,
-        'num_epochs': epoch,
-        'train_loss': training_loss,
-        'validation_loss': validation_loss
-    }
+        # Create a dictionary to save additional information (optional)
+        info = {
+            'architecture': MODEL_NAME ,
+            'init_values': init_values,
+            'hyperparameters': {
+                'learning_rate': LEARNING_RATE,
+                'weight_decay': WEIGHT_DECAY,
+                'layer_size': layer_sizes
+            },
+            'patience': PATIENCE,
+            'num_epochs': epoch,
+            'train_loss': training_loss,
+            'validation_loss': validation_loss
+        }
 
-    # Save the model and additional information
-    torch.save({'model_state_dict': fnn.state_dict(), 'info': info},
-                MODEL_PATH)
+        # Save the model and additional information
+        torch.save({'model_state_dict': fnn.state_dict(), 'info': info},
+                    MODEL_PATH)
