@@ -9,6 +9,7 @@ Also the following packages are required to run the notebook
 * torch
 * numpy
 * sklearn
+* tqdm
 * pickle
 
 
