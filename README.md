@@ -1,5 +1,5 @@
 # deepIsoform
-Use recreate_results.ipynb to test our best performing model on the gtex test dataset
+Use recreate_results.ipynb to test our best performing model on the gtex test dataset.
 In order to run this notebook, you are required to clone to repository to the DTU Computing Center HPC infrastructure.
 This is required since the large dataset and the model checkpoints are stored there.
 * Connect to the HPC via 'ssh sXXXXXX@login1.hpc.dtu.dk'
