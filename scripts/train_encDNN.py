@@ -50,15 +50,13 @@ print('BETA           ', BETA               )
 print('NUM_EPOCHS     ', NUM_EPOCHS         )
 
 # CHANGE PROJECT_DIR TO LOCATION OF deepIsoform
-PROJECT_DIR =f'/zhome/99/d/155947/DeeplearningProject/deepIsoform'
+PROJECT_DIR = f'/zhome/99/d/155947/DeeplearningProject/deepIsoform'
 MODEL_NAME = f'ENCODER_DENSE_l{LATENT_FEATURES}_lr{LEARNING_RATE}_e{NUM_EPOCHS}_wd{WEIGHT_DECAY}_p{PATIENCE}_b{BETA}'
 #METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/training_meta_data/encoder_dense_train_metadata_{NETWORK_SIZE}.tsv'
-MODEL_DIR= f'{PROJECT_DIR}/data/bhole_storage/models'
+MODEL_DIR = f'{PROJECT_DIR}/data/bhole_storage/models'
 
 ## Set manual for now
-#ENCODER_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/VAE_e100_lf{LATENT_FEATURES}_b{BETA}_hl128_lr0.0001'
-
-ENCODER_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/my_VAE_e30_lf{LATENT_FEATURES}_b{BETA}_hl128_lr0.0001'
+ENCODER_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/my_VAE_e30_lf{LATENT_FEATURES}_b{BETA}_lr0.0001'
 
 METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/bhole_storage/training_meta_data/custom_encoder_dense_train_metadata_lf{LATENT_FEATURES}_{NETWORK_SIZE}.tsv'
 
@@ -102,7 +100,6 @@ gene_expr, isoform_expr, _ = next(iter(gtx_train_dataloader))
 
 # Encoder model
 encoder_model = VAE_lf(input_shape=gene_expr[0].size(),
-                       hidden_features=0,
                        latent_features=LATENT_FEATURES)
 checkpoint = torch.load(ENCODER_PATH)
 encoder_model.load_state_dict(checkpoint['model_state_dict'])
@@ -285,14 +282,12 @@ write_training_data(file_path=METADATA_SAVE_PATH, metadata_dict=metadata_diction
 # Saving model
 if SAVE_MODEL:
     better_than_previous_models = check_better_test_loss(model_test_loss = avg_test_loss,
-                                                         model_prefix = 'PCA_DENSE',
+                                                         model_prefix = 'ENCODER_DENSE',
                                                          model_dir = MODEL_DIR)
     if better_than_previous_models:
         print(f"Saving {MODEL_NAME} as best model")
         init_values = {'batch_size': BATCH_SIZE,
                        'num_epochs': NUM_EPOCHS}
-
-        layer_sizes = [(layer.in_features, layer.out_features) for layer in fnn.fnn if isinstance(layer, torch.nn.Linear)]
 
         # Create a dictionary to save additional information (optional)
         info = {
@@ -300,8 +295,7 @@ if SAVE_MODEL:
             'init_values': init_values,
             'hyperparameters': {
                 'learning_rate': LEARNING_RATE,
-                'weight_decay': WEIGHT_DECAY,
-                'layer_size': layer_sizes
+                'weight_decay': WEIGHT_DECAY
             },
             'patience': PATIENCE,
             'num_epochs': epoch,

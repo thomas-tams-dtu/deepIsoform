@@ -49,10 +49,10 @@ print('NUM_EPOCHS     ', NUM_EPOCHS         )
 # CHANGE PROJECT_DIR TO LOCATION OF deepIsoform
 PROJECT_DIR =f'/zhome/99/d/155947/DeeplearningProject/deepIsoform'
 MODEL_NAME = f'PCA_DENSE_l{LATENT_FEATURES}_lr{LEARNING_RATE}_e{NUM_EPOCHS}_wd{WEIGHT_DECAY}_p{PATIENCE}'
-IPCA = f'/zhome/99/d/155947/DeeplearningProject/deepIsoform/models/ipca_model_n{LATENT_FEATURES}.pkl'
 METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/bhole_storage/training_meta_data/custom_pca_dense_train_metadata_{NETWORK_SIZE}.tsv'
 MODEL_DIR= f'{PROJECT_DIR}/data/bhole_storage/models'
-MODEL_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/{MODEL_NAME}'
+MODEL_PATH = f'{MODEL_DIR}/{MODEL_NAME}'
+IPCA = f'{MODEL_DIR}/ipca_model_n{LATENT_FEATURES}.pkl'
 
 # Check if size is proper
 if NETWORK_SIZE not in ['small', 'medium', 'large', 'XL', 'XXL']:
@@ -256,7 +256,7 @@ write_training_data(file_path=METADATA_SAVE_PATH, metadata_dict=metadata_diction
 # Saving model
 if SAVE_MODEL:
     better_than_previous_models = check_better_test_loss(model_test_loss = avg_test_loss,
-                                                         model_prefix = 'ENCODER_DENSE',
+                                                         model_prefix = 'PCA_DENSE',
                                                          model_dir = MODEL_DIR)
     if better_than_previous_models:
         print(f"Saving {MODEL_NAME} as best model")

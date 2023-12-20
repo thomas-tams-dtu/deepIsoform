@@ -14,7 +14,6 @@ import time
 
 parser = argparse.ArgumentParser(description='Training of VAE on the Archs4 dataset')
 parser.add_argument('-e', type=int, help='Number of epochs to train')
-parser.add_argument('-hl', type=int, help='Hidden layers size')
 parser.add_argument('-lf', type=int, help='Latents features used for encoding. Choose between 16, 32, 64, 128, 256, 512, 1024')
 parser.add_argument('-lr', type=float, help='Learning rate used for AdamW optimizer')
 parser.add_argument('-b', type=float, help="Beta value used KL-divergence in loss function")
@@ -25,7 +24,6 @@ args = parser.parse_args()
 
 BATCH_SIZE = args.bs        # 500
 NUM_EPOCHS = args.e         # 100
-HIDDEN_SIZE = args.hl       # 128, 256, 512, 1024, ect.
 LATENT_FEATURES = args.lf   # 16, 32, 64, 128, 256, 512, ect. 
 LEARNING_RATE = args.lr     # 1e-3
 BETA = args.b               # 0.5
@@ -34,7 +32,6 @@ SAVE_MODEL = args.sm
 
 print('BATCH_SIZE        ', BATCH_SIZE      )
 print('NUM_EPOCHS        ', NUM_EPOCHS      )
-print('HIDDEN_SIZE       ', HIDDEN_SIZE     )
 print('LATENT_FEATURES   ', LATENT_FEATURES )
 print('LEARNING_RATE     ', LEARNING_RATE   )
 print('BETA              ', BETA            )
@@ -44,20 +41,20 @@ print('PATIENCE          ', PATIENCE        )
 # CHANGE PROJECT_DIR TO LOCATION OF deepIsoform
 PROJECT_DIR = f'/zhome/99/d/155947/DeeplearningProject/deepIsoform'
 #MODEL_NAME = f'VAE_e{NUM_EPOCHS}_lf{LATENT_FEATURES}_b{BETA}_hl{HIDDEN_SIZE}_lr{LEARNING_RATE}'
-MODEL_NAME = f'my_VAE_e{NUM_EPOCHS}_lf{LATENT_FEATURES}_b{BETA}_hl{HIDDEN_SIZE}_lr{LEARNING_RATE}'
+MODEL_NAME = f'my_VAE_e{NUM_EPOCHS}_lf{LATENT_FEATURES}_b{BETA}_lr{LEARNING_RATE}'
 MODEL_SAVE_PATH = f'{PROJECT_DIR}/data/bhole_storage/models/{MODEL_NAME}'
 METADATA_SAVE_PATH = f'{PROJECT_DIR}/data/bhole_storage/training_meta_data/my_VAE_train_metadata.tsv'
 
 # Set up dataset and dataloader for archs4 data
 archs4_dataset_train = IsoDatasets.Archs4GeneExpressionDataset('/dtu-compute/datasets/iso_02456/hdf5-row-sorted/')
-archs4_dataloader_train = DataLoader(archs4_dataset_train, batch_size = BATCH_SIZE)
 archs4_dataset_val = IsoDatasets.Archs4GeneExpressionDataset('/dtu-compute/datasets/iso_02456/hdf5-row-sorted/',
                                                              validation_set=True)
-archs4_dataloader_val = DataLoader(archs4_dataset_val, batch_size = BATCH_SIZE)
+archs4_dataloader_train = DataLoader(archs4_dataset_train, batch_size = BATCH_SIZE, shuffle=True)
+archs4_dataloader_val = DataLoader(archs4_dataset_val, batch_size = BATCH_SIZE, shuffle=True)
 
 # Define VAE model
 gene_expr = next(iter(archs4_dataloader_train))
-vae = VAE_lf(input_shape=gene_expr[0].size(), hidden_features=HIDDEN_SIZE, latent_features=LATENT_FEATURES)
+vae = VAE_lf(input_shape=gene_expr[0].size(), latent_features=LATENT_FEATURES)
 print(vae)
 
 # Count parameters in model
@@ -121,12 +118,13 @@ while epoch < NUM_EPOCHS:
     training_loss.append(np.mean(epoch_loss))
     training_recon_loss.append(np.mean(epoch_recon))
     training_beta_kl_loss.append(np.mean(epoch_beta_kl_loss))
+    print('epoch train loss:', training_loss[-1])
 
     # Evaluate on a single batch, do not propagate gradients
     with torch.no_grad():
         vae.eval()
-        # Grab test data
-        # Zero the gradients
+        # Grab validation data
+        X = next(iter(archs4_dataloader_val))
         X = X.to(device)
         optimizer.zero_grad()
 

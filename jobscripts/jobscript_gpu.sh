@@ -3,7 +3,7 @@
 ### –- specify queue --
 #BSUB -q gpuv100
 ### -- set the job Name --
-#BSUB -J DNN_xl
+#BSUB -J EncDNN
 ### -- ask for number of cores (default: 1) --
 #BSUB -n 4
 ### -- Select the resources: 1 gpu in exclusive process mode --
@@ -52,7 +52,7 @@ source activate VAE-env2
 #for wd in "${weight_decays[@]}"; do
 #
 #/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/dense_train.py -ns ${net_size} -wd ${wd} -bs 500 -lr ${lr} -p 10 -e 100
-/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/train_standaloneDNN.py -ns XL -wd 5e-7 -bs 500 -lr 1e-3 -p 10 -e 100 --sm
+#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/train_standaloneDNN.py -ns XL -wd 5e-7 -bs 500 -lr 1e-3 -p 10 -e 100 --sm
 #done
 #done
 #
@@ -72,7 +72,7 @@ source activate VAE-env2
 #net_size=XL
 #lr=0.001
 
-##weight_decays=(1e-8 5e-8 1e-7 5e-7 1e-6 5e-6 1e-5 5e-5 1e-4 5e-4 1e-3)
+#weight_decays=(1e-8 5e-8 1e-7 5e-7 1e-6 5e-6 1e-5 5e-5 1e-4 5e-4 1e-3)
 #weight_decays=(5e-3 1e-2 5e-2 1e-1 5e-1)
 #latent_features=(16 32 64 128 256 512 1024 2048)
 ##latent_features=(512 1024 2048)
@@ -82,7 +82,7 @@ source activate VAE-env2
 #for wd in "${weight_decays[@]}"; do
 #
 #/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/PCA_dense_train.py -ns ${net_size} -lf ${lf} -wd ${wd} -bs 500 -lr ${lr} -p 10 -e 100
-/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/train_PCADNN.py -ns XL -lf 1024 -wd 5e-8 -bs 500 -lr 1e-4 -p 10 -e 100 --sm
+#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/train_PCADNN.py -ns XL -lf 1024 -wd 1e-8 -bs 500 -lr 1e-3 -p 10 -e 100 --sm
 #done
 #done
 #
@@ -97,8 +97,8 @@ source activate VAE-env2
 #for lf in "${latent_features[@]}"; do
 #for beta in "${beta_values[@]}"; do
 #
-#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/VAE_train.py -lf ${lf} -b ${beta} -bs 500 -lr 1e-4 -hl 128 -e 100 -p 100 --sm
-#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/VAE_train.py -lf 2 -b 1 -bs 200 -lr 1e-4 -hl 128 -e 10 -p 10
+#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/train_VAE.py -lf ${lf} -b ${beta} -bs 500 -lr 1e-4 -e 100 -p 100 --sm
+#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/train_VAE.py -lf 2 -b 1 -bs 200 -lr 1e-4 -e 10 -p 10
 #done
 #done
 #
@@ -131,12 +131,13 @@ source activate VAE-env2
 #    beta=${beta_values[i]}
 #
 #    for wd in "${weight_decays[@]}"; do
-#        /zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/encoder_dense_train.py -ns ${net_size} -lf ${lf} -wd ${wd} -b ${beta} -bs 500 -lr ${lr} -p 10 -e 100
+#        /zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/train_encDNN.py -ns ${net_size} -lf ${lf} -wd ${wd} -b ${beta} -bs 500 -lr ${lr} -p 10 -e 100
 #    done
 #done
 #
 #echo end of run
 
+#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/train_encDNN.py -ns XL -lf 256 -wd 5e-4 -b 0.001 -bs 500 -lr 1e-3 -p 10 -e 100 --sm
 
 ##### TRAIN CUSTOM ENCODER DENSE
 #net_size=small
@@ -165,7 +166,7 @@ source activate VAE-env2
 #done
 #done
 
-echo end of run
+#echo end of run
 
 
 ##### TRAIN VAE AND LATENT REPRESENTATION
@@ -177,5 +178,5 @@ echo end of run
 #
 #done
 #
-###/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/encoder_dense_latent_rep.py -ns small -lf 16 -wd 5e-7 -b 0 -bs 500 -lr 0.005 -p 10 -e 100 --sm
+##/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/encoder_dense_latent_rep.py -ns small -lf 16 -wd 5e-7 -b 0 -bs 500 -lr 0.005 -p 10 -e 100 --sm
 

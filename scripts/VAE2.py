@@ -13,12 +13,11 @@ def loss_function(output, x, mu, logvar, beta = 1.0):
     return recon_loss + beta * kl_loss, recon_loss, beta * kl_loss
 
 class VAE_lf(nn.Module):
-    def __init__(self, input_shape:torch.Size, hidden_features:int, latent_features:int) -> None:
+    def __init__(self, input_shape:torch.Size, latent_features:int) -> None:
         super(VAE_lf, self).__init__()
 
         self.input_shape = input_shape
         self.input_features = np.prod(input_shape)
-        self.hidden_features = hidden_features
         self.latent_features = latent_features
         
 
