@@ -16,8 +16,9 @@ print("gtex test set size:", len(gtex_test))
 
 print(len(gtex_test)/(len(gtex_test)+len(gtex_train)) * 100)
 
-gtx_train_dataloader = DataLoader(gtex_train, batch_size=5000, shuffle=True)
-gtx_test_dataloader = DataLoader(gtex_test, batch_size=5000, shuffle=True)
+gtx_train_dataloader = DataLoader(gtex_train, batch_size=500, shuffle=True)
+gtex_val_dataloader = DataLoader(gtex_val, batch_size=1, shuffle=True)
+gtx_test_dataloader = DataLoader(gtex_test, batch_size=1, shuffle=True)
 
 
 print('Training means for each attribute')
@@ -32,13 +33,14 @@ for X, y, _ in tqdm(gtx_train_dataloader):
     a = torch.add((torch.sum(y, dim=0)), a)
 
 meanTensor = torch.div(a,len(gtex_train))
+print(meanTensor)
+print(meanTensor.size())
 
 
-print('Calculating distance to test')
+print('Calculating distance to validation set')
 sum_squared_error = 0
-large = 0
 totalLength = 0
-for X, y, _ in gtx_test_dataloader:
+for X, y, _ in tqdm(gtex_val_dataloader):
     predictions = meanTensor.expand_as(y)
     
     squared_errors =(predictions - y)**2
@@ -47,10 +49,25 @@ for X, y, _ in gtx_test_dataloader:
     
     sum_squared_error += squared_errors.sum()
 
-mse_loss = sum_squared_error / (len(gtex_test) * 156958)
+mse_loss_val = sum_squared_error / (len(gtex_test) * 156958)
+
+print('Calculating distance to test set')
+sum_squared_error = 0
+totalLength = 0
+for X, y, _ in tqdm(gtx_test_dataloader):
+    predictions = meanTensor.expand_as(y)
+    
+    squared_errors =(predictions - y)**2
+    
+    totalLength += len(X)
+    
+    sum_squared_error += squared_errors.sum()
+
+mse_loss_test = sum_squared_error / (len(gtex_test) * 156958)
 
 
 #Print the MSE loss
 #print(f"Largest value:")
 print("Total length:" ,totalLength)
-print(f'MSE Loss: {mse_loss.item()}')
+print(f'MSE Val Loss: {mse_loss_val.item()}')
+print(f'MSE Test Loss: {mse_loss_test.item()}')
