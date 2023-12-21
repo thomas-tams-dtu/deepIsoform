@@ -49,7 +49,7 @@ for X, y, _ in tqdm(gtex_val_dataloader):
     
     sum_squared_error += squared_errors.sum()
 
-mse_loss_val = sum_squared_error / (len(gtex_test) * 156958)
+mse_loss_val = sum_squared_error / (len(gtex_val) * 156958)
 
 print('Calculating distance to test set')
 sum_squared_error = 0
