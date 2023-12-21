@@ -32,4 +32,5 @@ source activate VAE-env2
 
 #{ time /zhome/99/d/155947/DeeplearningProject/deepIsoform/tmp/small_VAE_test.py ; } 2> time_e50_d1000_100_l2000_1000_50.txt
 
-/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/latent_space_representation_UMAP.py
+#/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/latent_space_representation_UMAP.py
+/zhome/99/d/155947/DeeplearningProject/deepIsoform/scripts/calc_sd.py

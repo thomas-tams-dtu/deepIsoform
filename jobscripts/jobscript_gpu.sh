@@ -38,6 +38,8 @@ module load cuda/11.6
 source activate VAE-env2
 
 
+
+
 #### DENSE NETWORK
 #net_size=small
 #net_size=medium
